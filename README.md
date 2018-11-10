@@ -11,7 +11,7 @@
 - [ ] (?) How to rotate an object (and not just it's image!)
 
 ### ToDo:
-- [ ] **Collideable** walls at an angle.
+- [ ] ~~**Collideable** walls at an angle.~~
 - [ ] Add floor:
     - [ ] As long as the lemming has the floor underneath it won't fall.
     - [ ] Add water at the bottom of a level which kills the lemming.
