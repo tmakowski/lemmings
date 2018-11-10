@@ -1,6 +1,10 @@
 # lemmings
 ### Completed
-
+ - [x] Implement basic lemming class.
+ - [x] Add lemming "collision" with the map edge.
+ - [x] Add walls.
+ - [x] Add lemming collision with wall.
+ 
 ### Reading:
 - [ ] How to use sprites
 - [ ] How to use surface rotation
