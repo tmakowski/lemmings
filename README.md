@@ -39,15 +39,15 @@
 - [x] Implement falling (use angled walls as a floor).
 - [ ] Extend floor class to water:
     - [ ] Make it kill lemmings on contact.
+- [ ] Extend floor class to steps:
+    - [ ] on collision move lemming onto the first step,
+    - [ ] ensure that the difference between the step level and the current level is below a certain threshold.
 - [ ] Implement entrance:
     - [ ] Generates lemmings.
     - [ ] Generates lemmings with globally set interval.
 - [ ] Implement exit:    
     - [ ] delete lemmings when they move onto the exit block,
     - [ ] have a variable counting number of lemmings that made it to the exit.
-- [ ] Implement steps:
-    - [ ] on collision move lemming onto the first step,
-    - [ ] ensure that the difference between the step level and the current level is below a certain threshold.
     
 #### Level tied stuff
 - [ ] Timer.
@@ -107,3 +107,4 @@
     - detailed info on lemmings' deaths.
 - Random level generator.
 - In-game menu and main menu merge.
+- Change walls to be class extension of the floor. Tbh I don't think it'd be that useful.
