@@ -1,5 +1,16 @@
 # lemmings
+### Questions
+- [ ] Should I delete every field of the Lemming in it's destructor?
+
 ### Completed
+- [x] Implement a basic lemming.
+- [x] Move the lemming.
+- [x] Add image to the lemming.
+- [x] Collide the lemming with a map edges.
+- [x] Add a wall.
+- [x] Collide the lemming with the wall.
+- [x] Add floor -- as long as the lemming has the floor underneath it won't fall.
+- [x] Implement falling (use angled walls as a floor).
 
 ### Reading:
 - [ ] How to use sprites
@@ -8,10 +19,7 @@
 
 ### ToDo:
 - [ ] **Collideable** walls at an angle.
-- [ ] Add floor:
-    - [ ] As long as the lemming has the floor underneath it won't fall.
-    - [ ] Add water at the bottom of a level which kills the lemming.
-- [ ] Implement falling (use angled walls as a floor).
+- [ ] Add water at the bottom of a level which kills the lemming.
 - [ ] Create more lemming types:
     - [ ] stopper,
     - [ ] miner,
