@@ -19,6 +19,7 @@
 
 ### ToDo:
 - [ ] **Collideable** walls at an angle.
+- [ ] Define block size (== lemming's size).
 - [ ] Add water at the bottom of a level which kills the lemming.
 - [ ] Create more lemming types:
     - [ ] stopper,
