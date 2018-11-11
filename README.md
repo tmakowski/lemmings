@@ -1,58 +1,109 @@
 # lemmings
-### Questions
+## Questions
 - [ ] Should I delete every field of the Lemming in it's destructor?
 
-### Completed
+## Game's development note
+#### Loop structure
+1. [x] Exit if game was closed.
+1. [ ] Objects collisions:
+    1. [ ] water,
+    1. [ ] exit.
+1. For each lemming:
+    1. check wall collisions,
+    1. check if it stands on the floor,
+    1. move it.
+1. Draw:
+    1. background,
+    1. every lemming, object etc.
+1. Switch display to contain drawn objects.
+
+### Tasks
+#### Lemmings
 - [x] Implement a basic lemming.
-- [x] Move the lemming.
-- [x] Add image to the lemming.
-- [x] Collide the lemming with a map edges.
-- [x] Add a wall.
-- [x] Collide the lemming with the wall.
-- [x] Add floor -- as long as the lemming has the floor underneath it won't fall.
-- [x] Implement falling (use angled walls as a floor).
-
-### Reading:
-- [ ] How to use sprites
-- [ ] How to use surface rotation
-- [ ] (?) How to rotate an object (and not just it's image!)
-
-### ToDo:
-- [ ] **Collideable** walls at an angle.
-- [ ] Define block size (== lemming's size).
-- [ ] Add water at the bottom of a level which kills the lemming.
-- [ ] Create more lemming types:
-    - [ ] stopper,
+- [x] Added left/right movement.
+- [x] Added image to the lemming.
+- [x] Added collision with walls.
+- [x] Added collision with floors.
+- [x] Created destructor.
+- [x] Implemented falling.
+- [ ] Implement additional lemming types:
+    - [ ] blocker,
     - [ ] miner,
-    - [ ] parachute,
-    - [ ] step-placer.
-- [ ] Create a simple first level.
-- [ ] Implement entrance and exit.
-    - [ ] Entrance:
-        - [ ] Generates set number of lemmings.
-    - [ ] Exit:
-        - [ ] Deletes lemmings on appropriate
-        - [ ] Counts deleted lemmings
-        - [ ] Stops game as a win if there was sufficient amount of lemmings deleted.
-- [ ] Level timer
-- [ ] Statistics:
-    - [ ] Lemmings alive
-    - [ ] All lemmings
-    - [ ] Timer display
-- [ ] Create menu:
-    - [ ] Start new level
-        - [ ] Add level generation // add manual levels.
-        - [ ] Create introduction (first levels with hints)
-    - [ ] Load game
-- [ ] In-game menu:
-    - [ ] Pause on call
-    - [ ] Save game:
-        - [ ] Save the map
-        - [ ] Save the lemming positions
-        - [ ] Save the lemming types
-        - [ ] Save the time left
-    - [ ] Exit game -- return to main menu.
-- [ ] Merge menus
-- [ ] Improve graphics:
-    - [ ] Lemming animations
-    - [ ] Different terrain
+    - [ ] parachute lemming,
+    - [ ] step placer,
+    - [ ] teleport-builder.
+
+#### Objects
+- [x] Added walls. 
+- [x] Added floors.
+- [x] Implement falling (use angled walls as a floor).
+- [ ] Extend floor class to water:
+    - [ ] Make it kill lemmings on contact.
+- [ ] Implement entrance:
+    - [ ] Generates lemmings.
+    - [ ] Generates lemmings with globally set interval.
+- [ ] Implement exit:    
+    - [ ] delete lemmings when they move onto the exit block,
+    - [ ] have a variable counting number of lemmings that made it to the exit.
+- [ ] Implement steps:
+    - [ ] on collision move lemming onto the first step,
+    - [ ] ensure that the difference between the step level and the current level is below a certain threshold.
+    
+#### Level tied stuff
+- [ ] Timer.
+- [ ] Stats for lemmings:
+    - [ ] how many of them were spawned by the entrance,
+    - [ ] how many are still alive (percentage),
+    - [ ] ... 
+- [ ] Create level translator, that is a function to generate map from provided manually created layout:
+    * **Dictionaries will come in handy!**
+    - [ ] **B**: map **b**order wall,
+    - [ ] **W**: **w**ater,
+    - [ ] **S**: **s**tarting point (entrance),
+    - [ ] **E**: **e**xit,
+    - [ ] ...
+- [ ] Create tutorial levels -- about 3-5 of them:
+    - [ ] should contain tips,
+        * Those might be hard coded into the map background.
+        * Might as well be a game pauses to do specific actions.
+    - [ ] ...
+- [ ] Create other levels, preferably, with various difficulty levels.
+
+#### User interface
+- [ ] Create level interface:
+    - [ ] in-game menu call,
+    - [ ] row with different lemming types,
+    - [ ] ...
+- [ ] Create main menu:
+    - [ ] starting a new level:
+        - [ ] Tutorial levels on top.
+        - [ ] Grid of selectable levels.
+    - [ ] load game,
+    - [ ] exit game.
+- [ ] Create in-game menu:
+    - pause the game on call,
+    - save the game,
+    - exit to main menu.
+
+#### Other
+- [ ] One file with all global variables.
+- [ ] Define block's size (equal to lemming's size).
+- [ ] Implement game saving:
+    - [ ] save lemmings as a dictionary where the keys are the attributes,
+    - [ ] save the map layout,
+    - [ ] save the map stats,
+    - [ ] save the graphics set used (?).
+- [ ] Implement game loading.
+- [ ] Improve game graphics with:
+    - [ ] various objects,
+    - [ ] different sets of walls,
+    - [ ] additional backgrounds,
+    - [ ] animations for lemmings,
+    - [ ] different looks for each lemming type.
+
+### To consider:
+- Walls at an angle (could be just steps, to be honest).
+- Fancy stats:
+    - detailed info on lemmings' deaths.
+- Random level generator.
+- In-game menu and main menu merge.
