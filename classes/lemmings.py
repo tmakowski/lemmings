@@ -6,17 +6,16 @@ To keep in mind: the lemmings' graphics should be 1px smaller than the image can
 import pygame
 
 BLOCK_SIZE = 1
+LEMMING_FALL_THRESHOLD = 60
 
 
 class Lemming:
     """
-    This class is going to represent each lemming.
+    This class is going to represent a regular lemming.
     """
-    #global BLOCK_SIZE
-
     def __init__(self, position_x, position_y):
         """
-        Creates new lemming at (x, y)
+        Creates new lemming at position (x, y) counting from top left corner of the map.
         """
         # Assigning the image to the lemming
         self.image = pygame.image.load("graphics/lemming.png").convert()
@@ -25,7 +24,7 @@ class Lemming:
         self.rect = self.image.get_rect(x=position_x, y=position_y)
 
         # Setting movement direction for the lemming
-        self.dirX = 0
+        self.dirX = 1
         self.dirY = 1
 
         # Fall counter
@@ -35,26 +34,34 @@ class Lemming:
         self.dead = 0
 
     def __del__(self):
+        """
+        Lemming destructor... or lemming killer? Whatever. You get the point.
+        """
         # Deleting all lemming's parameters
-        del self.image
-        del self.rect
-        del self.dirX
-        del self.dirY
-        del self.fall
-        # The sad news:
+        # del self.image
+        # del self.rect
+        # del self.dirX
+        # del self.dirY
+        # del self.fall
+
+        # Delivering the sad news:
         self.dead = 1
         return None
 
     def move(self):
+        """
+        Function used to move lemmings in their current movement direction.
+        """
         # Importing the information about block sze
         global BLOCK_SIZE
 
-        # Moving the lemming in it is current X-axis direction by the block size
-        self.rect.x += self.dirX*BLOCK_SIZE
-
-        # Moving the lemming down if it is falling and counting how many block it have fell down
-        self.rect.y += self.dirY*BLOCK_SIZE
-        self.fall += self.dirY
+        if self.dirY == 0:
+            # Moving the lemming in it is current X-axis direction by the block size
+            self.rect.x += self.dirX * BLOCK_SIZE
+        else:
+            # Moving the lemming down if it is falling and counting how many block it have fell down
+            self.rect.y += self.dirY*BLOCK_SIZE
+            self.fall += self.dirY
         return self
 
     def collision_walls(self, walls):
@@ -68,18 +75,20 @@ class Lemming:
 
     def collision_floors(self, floors):
         """
-        Checks if the lemming collides with any of the floors in the list.
-        If it does then it's checked if it just hit the surface or not. If not - nothing happens.
+        Checks if the lemming has a floor under it's feet. If it doesn't then the lemming starts to fall.
         """
+        # Check if lemming is touching the floor on the floor
         if self.rect.collidelist(floors) != -1:
-            if self.fall > 60:
+            # Check if the lemming has passed the fall threshold
+            if self.fall > LEMMING_FALL_THRESHOLD*BLOCK_SIZE:
                 self.__del__()
+            # Check if it was falling at all
             elif self.fall > 0:
-                self.dirX = 1
+                # If it was falling, then stop the fall and reset the fall counter
                 self.dirY = 0
                 self.fall = 0
-        else:   # if the lemming does not collide with any of the floors
-            self.dirX = 0
+        else:
+            # If the lemming slipped of the floor then make it start falling
             self.dirY = 1
         return self
 
