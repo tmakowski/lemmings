@@ -17,7 +17,7 @@ class Lemming:
         """
         # Assigning the image to the lemming
         self.image = pygame.transform.scale(
-                        pygame.image.load("graphics/lemming2.png").convert(),
+                        pygame.image.load("graphics/lemming2.png"),
                         (BLOCK_SIZE, BLOCK_SIZE))
 
         # Creating pygame rect object based on image provided above
@@ -38,10 +38,10 @@ class Lemming:
         Lemming destructor... or lemming killer? Whatever. You get the point.
         """
         self.image = pygame.transform.scale(
-                        pygame.image.load("graphics/lemming_dead.png").convert(),
+                        pygame.image.load("graphics/lemming_dead.png"),
                         (BLOCK_SIZE, BLOCK_SIZE))
 
-        # Stopping the lemming's movment
+        # Stopping the lemming's movement
         self.dirX = 0
         self.dirY = 0
 
