@@ -4,9 +4,7 @@ File containing classes for all lemming types. That is:
 To keep in mind: the lemmings' graphics should be 1px smaller than the image canvas. Eg. 9x9 px lemming on 10x10 px image
 """
 import pygame
-
-BLOCK_SIZE = 1
-LEMMING_FALL_THRESHOLD = 60
+from global_variables import *
 
 
 class Lemming:
@@ -18,7 +16,9 @@ class Lemming:
         Creates new lemming at position (x, y) counting from top left corner of the map.
         """
         # Assigning the image to the lemming
-        self.image = pygame.image.load("graphics/lemming.png").convert()
+        self.image = pygame.transform.scale(
+                        pygame.image.load("graphics/lemming2.png").convert(),
+                        (BLOCK_SIZE, BLOCK_SIZE))
 
         # Creating pygame rect object based on image provided above
         self.rect = self.image.get_rect(x=position_x, y=position_y)
@@ -37,12 +37,13 @@ class Lemming:
         """
         Lemming destructor... or lemming killer? Whatever. You get the point.
         """
-        # Deleting all lemming's parameters
-        # del self.image
-        # del self.rect
-        # del self.dirX
-        # del self.dirY
-        # del self.fall
+        self.image = pygame.transform.scale(
+                        pygame.image.load("graphics/lemming_dead.png").convert(),
+                        (BLOCK_SIZE, BLOCK_SIZE))
+
+        # Stopping the lemming's movment
+        self.dirX = 0
+        self.dirY = 0
 
         # Delivering the sad news:
         self.dead = 1
@@ -52,15 +53,12 @@ class Lemming:
         """
         Function used to move lemmings in their current movement direction.
         """
-        # Importing the information about block sze
-        global BLOCK_SIZE
-
         if self.dirY == 0:
             # Moving the lemming in it is current X-axis direction by the block size
-            self.rect.x += self.dirX * BLOCK_SIZE
+            self.rect.x += self.dirX
         else:
             # Moving the lemming down if it is falling and counting how many block it have fell down
-            self.rect.y += self.dirY*BLOCK_SIZE
+            self.rect.y += self.dirY
             self.fall += self.dirY
         return self
 

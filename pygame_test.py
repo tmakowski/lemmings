@@ -1,4 +1,5 @@
 from classes import *
+from global_variables import *
 import sys
 import time
 # import pygame
@@ -6,14 +7,13 @@ import time
 # Initialization
 pygame.init()
 
-# Defining size and screen
-size = width, height = 320, 240
-screen = pygame.display.set_mode(size)
+# Defining screen
+screen = pygame.display.set_mode(SIZE)
 
 # Testing only: initializing objects
 lemmings = [Lemming(20, 20), Lemming(150, 84)]
 walls = [Wall(250, 0), Wall(250, 64)]
-floors = [Floor(0, 200), Floor(100, 200), Floor(0, 200), Floor(0,100)]
+floors = [Floor(100, 300, 7), Floor(0, 200), Floor(0, 100, 5)]
 
 while True:
     for event in pygame.event.get():
@@ -24,17 +24,17 @@ while True:
 
     # Moving each lemming
     for lem in lemmings:
+        # Check if lemming is dead
+        if lem.dead > 0:
+            # If it is dead then we display it's dead version for set number of frames and remove it afterwards
+            if lem.dead > LEMMING_DEATH_FRAMES:
+                lemmings.remove(lem)
+            lem.dead += 1
+            continue
+
         lem.collision_walls(walls)
         lem.collision_floors(floors)
 
-        if lem.dead == 1:
-            lemmings.remove(lem)
-            break
-
-        ### To be removed:
-        if lem.rect.left < 0 or lem.rect.right > width:
-            lem.dirX *= -1
-        ######
         lem.move()
 
 # Drawing the frame
@@ -50,4 +50,4 @@ while True:
 
 # System stuff
     # Setting custom pause between frames
-    time.sleep(0.005)
+    time.sleep(FRAME_TIME)
