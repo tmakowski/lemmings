@@ -8,11 +8,11 @@ import time
 pygame.init()
 
 # Defining screen
-screen = pygame.display.set_mode(SIZE)
+screen = pygame.display.set_mode(LEVEL_SIZE)
 
 # Testing only: initializing objects
 lemmings = [Lemming(20, 20), Lemming(150, 84)]
-walls = [Wall(250, 0), Wall(250, 64)]
+walls = [Wall(250, 0,length_y=5)]
 floors = [Floor(100, 300, 7), Floor(0, 200), Floor(0, 100, 5)]
 
 while True:
