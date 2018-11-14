@@ -1,9 +1,8 @@
 """
-File containing classes for all lemming types. That is:
-    - lemming
-To keep in mind: the lemmings' graphics should be 1px smaller than the image canvas. Eg. 9x9 px lemming on 10x10 px image
+File containing main lemming class and it's subclasses.
 """
 import pygame
+
 from global_variables import BLOCK_SIZE,\
     LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
     LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD
@@ -11,18 +10,18 @@ from global_variables import BLOCK_SIZE,\
 
 class Lemming:
     """
-    This class is going to represent a regular lemming.
+    This is a main lemming class which represents a lemming with no special abilities
     """
-    def __init__(self, position_x, position_y):
+    def __init__(self, position_x, position_y, img=LEMMING_GRAPHICS_DEFAULT):
         """
-        Creates new lemming at position (x, y) counting from top left corner of the map.
+        Creates new lemming at position (x, y) counting from top left corner of the map with selected graphics.
         """
         # Assigning the image to the lemming
         self.image = pygame.transform.scale(
-                        pygame.image.load(LEMMING_GRAPHICS_DEFAULT),
+                        pygame.image.load(img),
                         (BLOCK_SIZE, BLOCK_SIZE))
 
-        # Creating pygame rect object based on image provided above
+        # Creating the hitbox
         self.rect = self.image.get_rect(x=position_x, y=position_y)
 
         # Setting movement direction for the lemming
@@ -65,7 +64,7 @@ class Lemming:
             self.rect.x += self.dirX * self.speed
         else:
 
-            # Moving the lemming down if it is falling and counting how many block it have fell down
+            # Moving the lemming down if it is falling and counting for how many frames it has been falling
             self.rect.y += self.dirY * self.speed
             self.fall += self.dirY * self.speed
         return self
@@ -111,6 +110,9 @@ class Lemming:
             # If the lemming slipped of the floor then make it start falling
             self.dirY = 1
         return self
+
+    def collision_entrance(self, entrance):
+        pass
 
 
 class LemmingStopper (Lemming):

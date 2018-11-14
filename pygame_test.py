@@ -1,3 +1,4 @@
+from itertools import chain
 import pygame
 import sys
 import time
@@ -10,7 +11,7 @@ from global_variables import BLOCK_SIZE,\
 
 level = [
     "WWWWWWWWWWWWWWWWWWWW",
-    "W      W           W",
+    "WS     W           W",
     "W      W           W",
     "WFFFFF W           W",
     "W      W           W",
@@ -29,15 +30,21 @@ level = [
 # Level startup
 pygame.init()
 screen = pygame.display.set_mode(LEVEL_SIZE)    # setting screen of the globally set size
-dict_objects = generate_level(level)            # generating objects based on the level visualization
-
+objects_dictionarized = generate_level(level)   # generating objects based on the level visualization
+lemmings = []
+lemmings_spawn_number = 5
+lemmings_spawn_rate = 100
 # Testing only: initializing objects
-lemmings = [Lemming(BLOCK_SIZE, BLOCK_SIZE)]
+# lemmings = [Lemming(BLOCK_SIZE, BLOCK_SIZE)]
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+
+# Spawning lemmings
+    for obj_entrance in objects_dictionarized["Entrance"]:
+        obj_entrance.spawn(lemmings, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
 
 # Performing actions for each lemming
     for lem in lemmings:
@@ -54,7 +61,7 @@ while True:
             continue
 
         # Colliding the lemming with each type of objects
-        lem.collision(dict_objects)
+        lem.collision(objects_dictionarized)
 
         # Moving the lemming
         lem.move()
@@ -64,8 +71,8 @@ while True:
     # Filling background
     screen.fill((0, 0, 0))
 
-    # Drawing all objects
-    for obj in lemmings+dict_objects.values():
+    # Drawing lemmings and all objects
+    for obj in lemmings+list(chain.from_iterable(objects_dictionarized.values())):
         screen.blit(obj.image, obj.rect)
 
     # Changing display to show drawn objects

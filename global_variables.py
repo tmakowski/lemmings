@@ -14,6 +14,7 @@ LEMMING_GRAPHICS_DEFAULT = "graphics/lemming2.png"
 LEMMING_GRAPHICS_DEAD = "graphics/lemming_dead.png"
 
 #
-OBJECTS_NAMES = ["Floor", "Wall"]
+OBJECT_DICT = {"F": "Floor", "W": "Wall", "S": "Entrance"}
 OBJECT_GRAPHICS_FLOOR = "graphics/floor.png"
 OBJECT_GRAPHICS_WALL = "graphics/wall.png"
+OBJECT_GRAPHICS_ENTRANCE = "graphics/entrance.png"

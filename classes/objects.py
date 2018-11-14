@@ -1,6 +1,8 @@
 import pygame
+
+from classes.lemmings import Lemming
 from global_variables import BLOCK_SIZE,\
-    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL
+    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE
 
 
 class Floor:
@@ -28,10 +30,42 @@ class Floor:
 
 class Wall (Floor):
     """
-    Subclass representing walls.
+    Subclass representing the walls.
     """
     def __init__(self, position_x, position_y, length_x=None, length_y=None):
         """
-        Calls the constructor from parent class (Floor) with image representing a wall.
+        Calls the constructor from parent class (Floor) with an image representing a wall.
         """
         super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_WALL)
+
+
+class Entrance (Floor):
+    """
+    Subclass representing the level entrance.
+    """
+    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+        """
+        Calls the constructor of the parent class (Floor) with an image representing an entrance.
+        Additionally
+        """
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_ENTRANCE)
+
+        # Used to count frames between next lemmings spawns
+        self.spawn_timer = 0
+
+        # Counts how many lemmings were spawned
+        self.spawn_counter = 0
+
+    def spawn(self, lemmings, spawn_rate, spawn_number, lem_type=Lemming):
+        """
+        Method used to spawn lemmings at a set spawn rate and of the chosen lemming type.
+        """
+        self.spawn_timer += 1
+
+        # If the spawn counter reaches provided threshold then spawn a lemming and reset the counter
+        if self.spawn_timer == spawn_rate and self.spawn_counter < spawn_number:
+            lemmings.append(lem_type(self.rect.x, self.rect.y))
+            self.spawn_counter += 1
+            self.spawn_timer = 0
+
+        return self, lemmings
