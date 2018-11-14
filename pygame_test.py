@@ -3,12 +3,14 @@ import pygame
 import sys
 import time
 
-from classes.lemmings import Lemming
 from level_generator import generate_level
 from global_variables import BLOCK_SIZE,\
     LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 
 
+# Settings
+lemmings_spawn_number = 5                       # setting number of lemmings to spawn
+lemmings_spawn_rate = 100                       # setting number of frames between lemming spawns
 level = [
     "WWWWWWWWWWWWWWWWWWWW",
     "WS     W           W",
@@ -17,7 +19,7 @@ level = [
     "W      W           W",
     "WF FFFFF           W",
     "W                  W",
-    "W                  W",
+    "W     E            W",
     "WFFFFFF            W",
     "W                  W",
     "W                  W",
@@ -31,11 +33,8 @@ level = [
 pygame.init()
 screen = pygame.display.set_mode(LEVEL_SIZE)    # setting screen of the globally set size
 objects_dictionarized = generate_level(level)   # generating objects based on the level visualization
-lemmings = []
-lemmings_spawn_number = 5
-lemmings_spawn_rate = 100
-# Testing only: initializing objects
-# lemmings = [Lemming(BLOCK_SIZE, BLOCK_SIZE)]
+lemmings = []                                   # initializing a list for lemmings
+dev_timer = 0
 
 while True:
     for event in pygame.event.get():
@@ -63,6 +62,11 @@ while True:
         # Colliding the lemming with each type of objects
         lem.collision(objects_dictionarized)
 
+        # Checking if lemming has left via any of the exits
+        if lem.exit == 1:
+            lemmings.remove(lem)
+            continue
+
         # Moving the lemming
         lem.move()
 
@@ -82,3 +86,9 @@ while True:
 # System stuff
     # Setting custom pause between frames
     time.sleep(LEVEL_FRAME_TIME)
+
+    dev_timer += 1
+    if lemmings == [] and dev_timer > lemmings_spawn_rate:
+        for obj_exit in objects_dictionarized["Exit"]:
+            print("Uwaga, uwaga, tyle lemingów wyszło:", obj_exit.lemming_exit_number)
+        sys.exit()

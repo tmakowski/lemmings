@@ -2,7 +2,7 @@ import pygame
 
 from classes.lemmings import Lemming
 from global_variables import BLOCK_SIZE,\
-    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE
+    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT
 
 
 class Floor:
@@ -46,7 +46,7 @@ class Entrance (Floor):
     def __init__(self, position_x, position_y, length_x=None, length_y=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
-        Additionally
+        Additionally we set a timer and counter variables used during lemmings' spawning.
         """
         super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_ENTRANCE)
 
@@ -68,4 +68,14 @@ class Entrance (Floor):
             self.spawn_counter += 1
             self.spawn_timer = 0
 
-        return self, lemmings
+
+class Exit (Floor):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+        """
+        Calls the constructor of the parent class (Floor) with an image representing an entrance.
+        Additionally we set a counter for how many lemmings made it to that exit
+        """
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_EXIT)
+
+        # Counts how many lemmings left through that exit
+        self.lemming_exit_number = 0

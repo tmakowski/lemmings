@@ -14,7 +14,11 @@ LEMMING_GRAPHICS_DEFAULT = "graphics/lemming2.png"
 LEMMING_GRAPHICS_DEAD = "graphics/lemming_dead.png"
 
 #
-OBJECT_DICT = {"F": "Floor", "W": "Wall", "S": "Entrance"}
+OBJECT_DICT = {"F": "Floor",
+               "W": "Wall",
+               "S": "Entrance",
+               "E": "Exit"}
 OBJECT_GRAPHICS_FLOOR = "graphics/floor.png"
 OBJECT_GRAPHICS_WALL = "graphics/wall.png"
 OBJECT_GRAPHICS_ENTRANCE = "graphics/entrance.png"
+OBJECT_GRAPHICS_EXIT = "graphics/exit.png"

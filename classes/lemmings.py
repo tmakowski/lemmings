@@ -31,19 +31,20 @@ class Lemming:
         # Fall counter
         self.fall = 0
 
-        # Death flag
+        # Death & successful exit flags
         self.dead = 0
+        self.exit = 0
 
         # Speed (added for later use)
         self.speed = LEMMING_DEFAULT_SPEED
 
-    def __del__(self):
+    def __del__(self, img=LEMMING_GRAPHICS_DEAD):
         """
         Lemming destructor... or lemming killer? Whatever. You get the point.
         """
         # Changing image to the dead version
         self.image = pygame.transform.scale(
-                        pygame.image.load(LEMMING_GRAPHICS_DEAD),
+                        pygame.image.load(img),
                         (BLOCK_SIZE, BLOCK_SIZE))
 
         # Stopping the lemming's movement (so that we can display it's dead version for a while)
@@ -111,8 +112,17 @@ class Lemming:
             self.dirY = 1
         return self
 
-    def collision_entrance(self, entrance):
+    def collision_entrance(self, entrances):
         pass
+
+    def collision_exit(self, exits):
+        for obj_exit in exits:
+            if (self.rect.colliderect(obj_exit.rect) and
+                    self.rect.left == obj_exit.rect.left and
+                    self.rect.right == obj_exit.rect.right):
+                obj_exit.lemming_exit_number += 1
+                self.exit = 1
+        return self
 
 
 class LemmingStopper (Lemming):
