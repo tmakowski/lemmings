@@ -1,10 +1,14 @@
 """
 The purpose of this module is translating text visualization of the map to the proper objects.
 """
-from classes.objects import Floor, Wall
-from global_variables import BLOCK_SIZE, OBJECTS_NAMES
+import classes.objects
+from global_variables import BLOCK_SIZE, OBJECT_DICT
 
-DICT_CODE_TO_OBJ = {"W": Wall, "F": Floor}
+code_to_class_dict = dict([
+    (code, getattr(classes.objects, class_name))
+    for (code, class_name)
+    in zip(OBJECT_DICT.keys(), OBJECT_DICT.values())
+])
 
 
 def generate_level(level_layout):
@@ -15,9 +19,11 @@ def generate_level(level_layout):
     objects = []
     offset_y = 0
     for line in level_layout:
+
         # Variable used to place objects correctly
         offset_x = -1
         for code in line:
+
             # Increasing the offset from the edge
             offset_x += 1
 
@@ -26,18 +32,18 @@ def generate_level(level_layout):
                 continue
 
             # Creating the objects
-            objects.append(DICT_CODE_TO_OBJ[code](BLOCK_SIZE * offset_x, BLOCK_SIZE * offset_y))
+            objects.append(code_to_class_dict[code](BLOCK_SIZE * offset_x, BLOCK_SIZE * offset_y))
 
         # Moving to the next line
         offset_y += 1
-    return dict_sort_objects(objects)
+    return sort_objects_to_dict(objects)
 
 
-def dict_sort_objects(objects):
+def sort_objects_to_dict(objects):
     """
     This function generates dictionary for 'object name: list of objects with class' name == object name'.
     """
-    dict_objects = {}
-    for obj_name in OBJECTS_NAMES:
-        dict_objects[obj_name] = [obj for obj in objects if obj.__class__.__name__ == obj_name]
-    return dict_objects
+    objects_dictionarized = {}
+    for class_name in OBJECT_DICT.values():
+        objects_dictionarized[class_name] = [obj for obj in objects if obj.__class__.__name__ == class_name]
+    return objects_dictionarized
