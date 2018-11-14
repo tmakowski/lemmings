@@ -4,7 +4,9 @@ File containing classes for all lemming types. That is:
 To keep in mind: the lemmings' graphics should be 1px smaller than the image canvas. Eg. 9x9 px lemming on 10x10 px image
 """
 import pygame
-from global_variables import *
+from global_variables import BLOCK_SIZE,\
+    LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
+    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD
 
 
 class Lemming:
@@ -17,7 +19,7 @@ class Lemming:
         """
         # Assigning the image to the lemming
         self.image = pygame.transform.scale(
-                        pygame.image.load("graphics/lemming2.png"),
+                        pygame.image.load(LEMMING_GRAPHICS_DEFAULT),
                         (BLOCK_SIZE, BLOCK_SIZE))
 
         # Creating pygame rect object based on image provided above
@@ -33,17 +35,20 @@ class Lemming:
         # Death flag
         self.dead = 0
 
+        # Speed (added for later use)
+        self.speed = LEMMING_DEFAULT_SPEED
+
     def __del__(self):
         """
         Lemming destructor... or lemming killer? Whatever. You get the point.
         """
+        # Changing image to the dead version
         self.image = pygame.transform.scale(
-                        pygame.image.load("graphics/lemming_dead.png"),
+                        pygame.image.load(LEMMING_GRAPHICS_DEAD),
                         (BLOCK_SIZE, BLOCK_SIZE))
 
-        # Stopping the lemming's movement
-        self.dirX = 0
-        self.dirY = 0
+        # Stopping the lemming's movement (so that we can display it's dead version for a while)
+        self.speed = 0
 
         # Delivering the sad news:
         self.dead = 1
@@ -51,18 +56,30 @@ class Lemming:
 
     def move(self):
         """
-        Function used to move lemmings in their current movement direction.
+        Function used to move lemmings in their current movement direction by their speed value.
+        Note: if lemming falls then it does not move along the X-axis
         """
         if self.dirY == 0:
+
             # Moving the lemming in it is current X-axis direction by the block size
-            self.rect.x += self.dirX
+            self.rect.x += self.dirX * self.speed
         else:
+
             # Moving the lemming down if it is falling and counting how many block it have fell down
-            self.rect.y += self.dirY
-            self.fall += self.dirY
+            self.rect.y += self.dirY * self.speed
+            self.fall += self.dirY * self.speed
         return self
 
-    def collision_walls(self, walls):
+    def collision(self, dict_objects):
+        """
+        One method to rule them all! Function calls collision method for each object type in dict_objects.
+        """
+        for key in dict_objects.keys():
+            method = getattr(self, "collision_" + key.lower())
+            method(dict_objects[key])
+        return self
+
+    def collision_wall(self, walls):
         """
         Checks if the lemming collided with any of the walls.
         If it did then it's X-axis movement direction gets changed.
@@ -71,21 +88,26 @@ class Lemming:
             self.dirX *= -1
         return self
 
-    def collision_floors(self, floors):
+    def collision_floor(self, floors):
         """
         Checks if the lemming has a floor under it's feet. If it doesn't then the lemming starts to fall.
+        If it is falling and touches the floor then we perform check whether the fall distance wasn't too big.
         """
         # Check if lemming is touching the floor on the floor
         if self.rect.collidelist(floors) != -1:
+
             # Check if the lemming has passed the fall threshold
-            if self.fall > LEMMING_FALL_THRESHOLD*BLOCK_SIZE:
+            if self.fall > LEMMING_FALL_THRESHOLD * BLOCK_SIZE:
                 self.__del__()
+
             # Check if it was falling at all
             elif self.fall > 0:
+
                 # If it was falling, then stop the fall and reset the fall counter
                 self.dirY = 0
                 self.fall = 0
         else:
+
             # If the lemming slipped of the floor then make it start falling
             self.dirY = 1
         return self
