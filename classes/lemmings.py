@@ -5,14 +5,17 @@ import pygame
 
 from global_variables import BLOCK_SIZE,\
     LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
-    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD
+    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMINGS_GRAPHICS_STOPPER
 
 
 class Lemming:
     """
     This is a main lemming class which represents a lemming with no special abilities
     """
-    def __init__(self, position_x, position_y, img=LEMMING_GRAPHICS_DEFAULT):
+    def __init__(self, position_x, position_y, img=LEMMING_GRAPHICS_DEFAULT,
+                 direction_x=1, direction_y=1, fall_arg=0,
+                 dead_arg=0, remove_arg=0,
+                 speed_arg=LEMMING_DEFAULT_SPEED):
         """
         Creates new lemming at position (x, y) counting from top left corner of the map with selected graphics.
         """
@@ -25,18 +28,18 @@ class Lemming:
         self.rect = self.image.get_rect(x=position_x, y=position_y)
 
         # Setting movement direction for the lemming
-        self.dirX = 1
-        self.dirY = 1
+        self.dirX = direction_x
+        self.dirY = direction_y
 
         # Fall counter
-        self.fall = 0
+        self.fall = fall_arg
 
-        # Death & successful exit flags
-        self.dead = 0
-        self.exit = 0
+        # Death & removal flags
+        self.dead = dead_arg
+        self.remove = remove_arg
 
         # Speed (added for later use)
-        self.speed = LEMMING_DEFAULT_SPEED
+        self.speed = speed_arg
 
     def __del__(self, img=LEMMING_GRAPHICS_DEAD):
         """
@@ -70,15 +73,28 @@ class Lemming:
             self.fall += self.dirY * self.speed
         return self
 
-    def collision(self, dict_objects):
+    def collision_lemmings(self, lemmings):
+        pass
+
+    def collision_objects(self, dict_objects):
         """
         One method to rule them all! Function calls collision method for each object type in dict_objects.
         """
         for key in dict_objects.keys():
+
+            # Walls and floors are handled below
+            if key in ["Wall", "Floor"]:
+                continue
+
             method = getattr(self, "collision_" + key.lower())
             method(dict_objects[key])
+
+        # Treating walls as a floors to avoid some shenanigans (we want lemmings to step off of the top of the walls)
+        self.collision_floor(dict_objects["Wall"]+dict_objects["Floor"])
+
         return self
 
+    # Not used
     def collision_wall(self, walls):
         """
         Checks if the lemming collided with any of the walls.
@@ -107,8 +123,9 @@ class Lemming:
                 self.dirY = 0
                 self.fall = 0
 
-            # Colliding the lemming with the sides of the floors that are at the same level or above him
-            self.collision_wall([floor for floor in floors if self.rect.y >= floor.rect.y])
+            # Colliding the lemming with the sides of the floors/walls that are not directly below him
+            if self.rect.collidelist([floor for floor in floors if abs(self.rect.bottom-floor.rect.top) > 1]) != -1:
+                self.dirX *= -1
         else:
 
             # If the lemming slipped of the floor then make it start falling
@@ -126,9 +143,11 @@ class Lemming:
         for obj_exit in exits:
             if (self.rect.colliderect(obj_exit.rect) and
                     self.rect.left == obj_exit.rect.left and
-                    self.rect.right == obj_exit.rect.right):
+                    self.rect.right == obj_exit.rect.right and
+                    self.rect.top == obj_exit.rect.top and
+                    self.rect.bottom == obj_exit.rect.bottom):
                 obj_exit.lemming_exit_number += 1
-                self.exit = 1
+                self.remove = 1
                 break
         return self
 
@@ -136,11 +155,12 @@ class Lemming:
         """
         Method to kill lemmings on contact with water
         """
-
         for water in waters:
             if (self.rect.colliderect(water.rect) and
                     self.rect.left == water.rect.left and
-                    self.rect.right == water.rect.right):
+                    self.rect.right == water.rect.right and
+                    self.rect.top == water.rect.top and
+                    self.rect.bottom == water.rect.bottom):
                 self.__del__()
                 break
         return self
@@ -150,3 +170,17 @@ class LemmingStopper (Lemming):
     """
     # This extended class is going to represent the lemming with a stopper function.
     """
+    def __init__(self, lemming, img=LEMMINGS_GRAPHICS_STOPPER):
+        """
+        This constructor creates a stopper lemming in place of the other
+        """
+        super(self.__class__, self).__init__(position_x=lemming.rect.x, position_y=lemming.rect.y, img=img,
+                                             direction_x=lemming.dirX, direction_y=lemming.dirY, fall_arg=lemming.fall,
+                                             dead_arg=lemming.dead, remove_arg=lemming.remove,
+                                             speed_arg=0)
+        lemming.remove = 1
+
+    def collision_lemmings(self, lemmings):
+        for lem in lemmings:
+            if self.rect.colliderect(lem.rect):
+                lem.dirX *= -1

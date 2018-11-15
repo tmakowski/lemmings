@@ -12,6 +12,7 @@ LEMMING_FALL_THRESHOLD = 5
 LEMMING_DEFAULT_SPEED = 1
 LEMMING_GRAPHICS_DEFAULT = "graphics/lemming2.png"
 LEMMING_GRAPHICS_DEAD = "graphics/lemming_dead.png"
+LEMMINGS_GRAPHICS_STOPPER = "graphics/lemming_stopper.png"
 
 #
 OBJECT_DICT = {"F": "Floor",

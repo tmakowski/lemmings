@@ -13,19 +13,19 @@ lemmings_spawn_number = 5                       # setting number of lemmings to 
 lemmings_spawn_rate = 100                       # setting number of frames between lemming spawns
 level = [
     "WWWWWWWWWWWWWWWWWWWW",
-    "WS     W           W",
-    "W      W           W",
-    "WFFFFF W           W",
-    "W      W           W",
-    "WF FFFFF           W",
-    "W                  W",
+    "WS     F           W",
+    "W      F           W",
+    "WFFFFF F           W",
+    "W      F           W",
+    "WF  FFFF           W",
+    "W  W               W",
     "W                  W",
     "WFFFFFF            W",
     "W                  W",
-    "W S W              W",
-    "W FFF              W",
-    "W      E           W",
-    "WFFFww             W",
+    "W S F  F           W",
+    "W FFF    F         W",
+    "W      EF          W",
+    "WFFFwwwwF          W",
     "WFFFFFFFFFFFFFFFFFFW"]
 
 
@@ -34,14 +34,21 @@ pygame.init()
 screen = pygame.display.set_mode(LEVEL_SIZE)    # setting screen of the globally set size
 objects_dictionarized = generate_level(level)   # generating objects based on the level visualization
 lemmings = []                                   # initializing a list for lemmings
-dev_timer = 0
 
+dev_timer = 0
+from classes.lemmings import *
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            clicked = [s for s in lemmings if s.rect.collidepoint(pos)]
+            for lem in clicked:
+                lemmings.remove(lem)
+    if dev_timer == 300:
+        lemmings.append(LemmingStopper(lemmings[2]))
 # Spawning lemmings
     for obj_entrance in objects_dictionarized["Entrance"]:
         obj_entrance.spawn(lemmings, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
@@ -61,10 +68,13 @@ while True:
             continue
 
         # Colliding the lemming with each type of objects
-        lem.collision(objects_dictionarized)
+        lem.collision_objects(objects_dictionarized)
 
-        # Checking if lemming has left via any of the exits
-        if lem.exit == 1:
+        # Collides lemmings with one another
+        lem.collision_lemmings(lemmings)
+
+        # Removing lemmings that made it to the exit or got upgraded to different type
+        if lem.remove == 1:
             lemmings.remove(lem)
             continue
 
