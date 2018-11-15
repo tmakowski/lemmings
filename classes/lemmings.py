@@ -21,9 +21,9 @@ class Lemming:
         """
         if lemming_arg is None:
             # Assigning the image to the lemming
-            img = LEMMING_GRAPHICS_DEFAULT if img_arg is None else img_arg
+            self.image_name = LEMMING_GRAPHICS_DEFAULT if img_arg is None else img_arg
             self.image = pygame.transform.scale(
-                            pygame.image.load(img),
+                            pygame.image.load(self.image_name),
                             (BLOCK_SIZE, BLOCK_SIZE))
 
             # Creating the hitbox
@@ -46,10 +46,12 @@ class Lemming:
         # If we provided lemming to base on then we take it's attributes over defaults
         else:
             if img_arg is None:
+                self.image_name = lemming_arg.image_name
                 self.image = lemming_arg.image
             else:
+                self.image_name = img_arg
                 self.image = pygame.transform.scale(
-                    pygame.image.load(img_arg),
+                    pygame.image.load(self.image_name),
                     (BLOCK_SIZE, BLOCK_SIZE))
 
             self.rect = self.image.get_rect(x=position_x, y=position_y)
@@ -79,6 +81,21 @@ class Lemming:
         # Delivering the sad news:
         self.dead = 1
         return None
+
+    def __dir__(self):
+        """
+        All lemmings' attributes.
+        """
+        return ["rect", "image_name", "dirX", "dirY", "fall", "dead", "remove", "speed"]
+
+    def __str__(self):
+        """
+        Prints a dictionary containing each attribute and it's value.
+        """
+        attribute_dict = {}
+        for attr in self.__dir__():
+            attribute_dict[attr] = getattr(self, attr)
+        return attribute_dict.__str__()
 
     def move(self):
         """
