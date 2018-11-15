@@ -3,7 +3,7 @@ The purpose of this module is translating text visualization of the map to the p
 """
 import classes.objects
 from classes.lemmings import Lemming
-from global_variables import BLOCK_DEFAULT_SIZE, OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS
+from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS
 
 code_to_class_dict = dict([
     (code, getattr(classes.objects, class_name))
@@ -12,11 +12,11 @@ code_to_class_dict = dict([
 ])
 
 
-def level_interface(block_size, level_size): # może lista?
+def level_interface(block_size, level_size):  # może lista?
     pass
 
 
-def level_generate(level_layout):
+def level_generate(level_layout, block_size):
     """
     This function creates objects used in the level based in visualization of the level layout.
     """
@@ -37,7 +37,7 @@ def level_generate(level_layout):
                 continue
 
             # Creating the objects
-            objects.append(code_to_class_dict[code](BLOCK_DEFAULT_SIZE * offset_x, BLOCK_DEFAULT_SIZE * offset_y))
+            objects.append(code_to_class_dict[code](block_size * offset_x, block_size * offset_y, block_size=block_size))
 
         # Moving to the next line
         offset_y += 1
@@ -65,7 +65,7 @@ def level_import_layout(file_name, path="./"):
     return layout
 
 
-def level_load_lemmings(file_name, path="./"):
+def level_load_lemmings(file_name, block_size, path="./"):
     """
     Function creates list of lemmings based on a file provided
     """
@@ -81,7 +81,8 @@ def level_load_lemmings(file_name, path="./"):
             attribute_dict = eval(lem_input[2])
 
             # Creating output lemming
-            lem_output = Lemming(position_x=position_x, position_y=position_y, attribute_dict=attribute_dict)
+            lem_output = Lemming(position_x=position_x, position_y=position_y,
+                                 block_size=block_size, attribute_dict=attribute_dict)
 
             # Either adding the lemming to a pool or converting it to a specific type first
             if class_name == "Lemming":
@@ -91,7 +92,7 @@ def level_load_lemmings(file_name, path="./"):
     return lemmings
 
 
-def level_load_objects(file_name, path="./"):
+def level_load_objects(file_name, block_size, path="./"):
     """
     Function creates list of objects based on file input (at the end we sort objects to dictionary).
     """
@@ -109,20 +110,20 @@ def level_load_objects(file_name, path="./"):
             # Creating output lemming
             objects.append(
                 getattr(classes.objects, class_name)
-                (position_x=position_x, position_y=position_y, attribute_dict=attribute_dict))
+                (position_x=position_x, position_y=position_y, block_size=block_size, attribute_dict=attribute_dict))
 
     return sort_objects_to_dict(objects)
 
 
-def level_load_save(save_slot, path=None):
+def level_load_save(save_slot, block_size, path=None):
     """
     Loads objects and lemmings from files
     """
     if path is None:
         path = SAVE_PATH + str(save_slot) + "/"
 
-    lemmings = level_load_lemmings(SAVE_LEMMINGS, path)
-    objects_dictionarized = level_load_objects(SAVE_OBJECTS, path)
+    lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, path)
+    objects_dictionarized = level_load_objects(SAVE_OBJECTS, block_size, path)
 
     return lemmings, objects_dictionarized
 

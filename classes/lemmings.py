@@ -3,8 +3,7 @@ File containing main lemming class and it's subclasses.
 """
 import pygame
 
-from global_variables import BLOCK_DEFAULT_SIZE,\
-    LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
+from global_variables import LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
     LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMINGS_GRAPHICS_STOPPER
 
 
@@ -12,7 +11,7 @@ class Lemming:
     """
     This is a main lemming class which represents a lemming with no special abilities
     """
-    def __init__(self, position_x, position_y, block_size=BLOCK_DEFAULT_SIZE, img_arg=None,
+    def __init__(self, position_x, position_y, block_size, img_arg=None,
                  direction_x=None, direction_y=None, fall_arg=None,
                  dead_arg=None, remove_arg=None, speed_arg=None,
                  lemming_arg=None, attribute_dict=None):
@@ -224,6 +223,7 @@ class LemmingStopper (Lemming):
         This constructor creates a stopper lemming in place of the other
         """
         super(self.__class__, self).__init__(lemming_arg.rect.x, lemming_arg.rect.y,
+                                             block_size=lemming_arg.image.get_rect().height,
                                              img_arg=img_arg, speed_arg=0, lemming_arg=lemming_arg)
         lemming_arg.remove = 1
 

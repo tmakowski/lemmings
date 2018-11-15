@@ -16,13 +16,13 @@ screen = pygame.display.set_mode(size)
 button_font = pygame.font.SysFont('Verdana', block_size)
 
 # Creating the buttons
-button_start = MenuButton(0, 200, length_x=5, length_y=2, img="graphics/water.png",
+button_start = MenuButton(0, 200, block_size, length_x=5, length_y=2, img="graphics/water.png",
                           text_arg="Start game", text_color_arg=(250, 100, 6), text_font_arg=button_font)
 
-button_load = MenuButton(0, 350, length_x=5, length_y=2, img="graphics/water.png",
+button_load = MenuButton(0, 350, block_size, length_x=5, length_y=2, img="graphics/water.png",
                          text_arg="Load game", text_color_arg=(250, 100, 6), text_font_arg=button_font)
 
-button_exit = MenuButton(0, 500, length_x=5, length_y=2, img="graphics/water.png",
+button_exit = MenuButton(0, 500, block_size, length_x=5, length_y=2, img="graphics/water.png",
                          text_arg="Exit", text_color_arg=(250, 100, 6), text_font_arg=button_font)
 
 # Packing the buttons to a list and craeting dictionary for their uses
@@ -51,10 +51,10 @@ while True:
                 if button.rect.collidepoint(click_pos):
 
                     if button == button_start:
-                        button_to_action_dict[button](lemmings_spawn_number, lemmings_spawn_rate,
+                        button_to_action_dict[button](lemmings_spawn_number, lemmings_spawn_rate, block_size,
                                                       level_file="./level.txt")
                     elif button == button_load:
-                        button_to_action_dict[button][0](lemmings_spawn_number, lemmings_spawn_rate,
+                        button_to_action_dict[button][0](lemmings_spawn_number, lemmings_spawn_rate, block_size,
                                                          save_slot=button_to_action_dict[button][1])
                     else:
                         button_to_action_dict[button]()

@@ -8,16 +8,16 @@ from global_variables import LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 # from classes.lemmings import *
 
 
-def level_run(lemmings_spawn_number, lemmings_spawn_rate, level_file=None, save_slot=None):
+def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file=None, save_slot=None):
     # Level startup
     pygame.init()
-    screen = pygame.display.set_mode(LEVEL_SIZE)        # setting screen of the globally set size
+    screen = pygame.display.set_mode(LEVEL_SIZE)                    # setting screen of the globally set size
     if save_slot is None:
-        lemmings = []                                   # initializing a list for lemmings if those weren't provided
-        level = level_import_layout(level_file)         # importing level layout
-        objects_dictionarized = level_generate(level)   # generating objects based on the level visualization
+        lemmings = []                                               # initializing a list for lemmings if those weren't provided
+        level = level_import_layout(level_file)                     # importing level layout
+        objects_dictionarized = level_generate(level, block_size)   # generating objects based on the level visualization
     else:
-        lemmings, objects_dictionarized = level_load_save(save_slot)
+        lemmings, objects_dictionarized = level_load_save(save_slot, block_size)
         lemmings_spawn_number = 0 # should be read
 
     dev_timer = 0
@@ -37,7 +37,7 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, level_file=None, save_
 
     # Spawning lemmings
         for obj_entrance in objects_dictionarized["Entrance"]:
-            obj_entrance.spawn(lemmings, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
+            obj_entrance.spawn(lemmings, block_size=block_size, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
 
     # Performing actions for each lemming
         for lem in lemmings:

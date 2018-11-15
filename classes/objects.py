@@ -1,7 +1,7 @@
 import pygame
 
 from classes.lemmings import Lemming
-from global_variables import BLOCK_DEFAULT_SIZE,\
+from global_variables import \
     OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER
 
 
@@ -9,7 +9,7 @@ class Floor:
     """
     Parent class for all objects' classes.
     """
-    def __init__(self, position_x, position_y, block_size=BLOCK_DEFAULT_SIZE, length_x=None, length_y=None,
+    def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_FLOOR,
                  attribute_dict=None):
         """
@@ -58,8 +58,7 @@ class Wall (Floor):
     """
     Subclass representing the walls.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None,
-                 block_size=BLOCK_DEFAULT_SIZE,
+    def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_WALL,
                  attribute_dict=None):
         """
@@ -73,8 +72,7 @@ class Entrance (Floor):
     """
     Subclass representing the level entrance.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None,
-                 block_size=BLOCK_DEFAULT_SIZE,
+    def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_ENTRANCE,
                  attribute_dict=None):
         """
@@ -96,7 +94,7 @@ class Entrance (Floor):
         """
         return ["image_name", "length_x", "length_y", "spawn_timer", "spawn_counter"]
 
-    def spawn(self, lemmings, spawn_rate, spawn_number, lem_type=Lemming):
+    def spawn(self, lemmings, block_size, spawn_rate, spawn_number, lem_type=Lemming):
         """
         Method used to spawn lemmings at a set spawn rate and of the chosen lemming type.
         """
@@ -104,14 +102,13 @@ class Entrance (Floor):
 
         # If the spawn counter reaches provided threshold then spawn a lemming and reset the counter
         if self.spawn_timer == spawn_rate and self.spawn_counter < spawn_number:
-            lemmings.append(lem_type(self.rect.x, self.rect.y))
+            lemmings.append(lem_type(self.rect.x, self.rect.y, block_size))
             self.spawn_counter += 1
             self.spawn_timer = 0
 
 
 class Exit (Floor):
-    def __init__(self, position_x, position_y, length_x=None, length_y=None,
-                 block_size=BLOCK_DEFAULT_SIZE,
+    def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_EXIT,
                  attribute_dict=None):
         """
@@ -132,8 +129,7 @@ class Exit (Floor):
 
 
 class Water (Floor):
-    def __init__(self, position_x, position_y, length_x=None, length_y=None,
-                 block_size=BLOCK_DEFAULT_SIZE,
+    def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_WATER,
                  attribute_dict=None):
         """
@@ -147,8 +143,7 @@ class MenuButton (Floor):
     """
     Class representing
     """
-    def __init__(self, position_x, position_y, img, text_arg, text_font_arg, text_color_arg,
-                 block_size=BLOCK_DEFAULT_SIZE,
+    def __init__(self, position_x, position_y, block_size, img, text_arg, text_font_arg, text_color_arg,
                  length_x=None, length_y=None):
         """
         Calls the constructor from parent class (Floor) with a selected image.
