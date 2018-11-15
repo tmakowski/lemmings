@@ -12,34 +12,57 @@ class Lemming:
     """
     This is a main lemming class which represents a lemming with no special abilities
     """
-    def __init__(self, position_x, position_y, img=LEMMING_GRAPHICS_DEFAULT,
-                 direction_x=1, direction_y=1, fall_arg=0,
-                 dead_arg=0, remove_arg=0,
-                 speed_arg=LEMMING_DEFAULT_SPEED):
+    def __init__(self, position_x, position_y, img_arg=None,
+                 direction_x=None, direction_y=None, fall_arg=None,
+                 dead_arg=None, remove_arg=None,
+                 speed_arg=None, lemming_arg=None):
         """
-        Creates new lemming at position (x, y) counting from top left corner of the map with selected graphics.
+        Creates new lemming at position (x, y) counting from top left corner of the map with selected graphics and stats.
         """
-        # Assigning the image to the lemming
-        self.image = pygame.transform.scale(
-                        pygame.image.load(img),
-                        (BLOCK_SIZE, BLOCK_SIZE))
+        if lemming_arg is None:
+            # Assigning the image to the lemming
+            img = LEMMING_GRAPHICS_DEFAULT if img_arg is None else img_arg
+            self.image = pygame.transform.scale(
+                            pygame.image.load(img),
+                            (BLOCK_SIZE, BLOCK_SIZE))
 
-        # Creating the hitbox
-        self.rect = self.image.get_rect(x=position_x, y=position_y)
+            # Creating the hitbox
+            self.rect = self.image.get_rect(x=position_x, y=position_y)
 
-        # Setting movement direction for the lemming
-        self.dirX = direction_x
-        self.dirY = direction_y
+            # Setting movement direction for the lemming
+            self.dirX = 1 if direction_x is None else direction_x
+            self.dirY = 1 if direction_y is None else direction_y
 
-        # Fall counter
-        self.fall = fall_arg
+            # Fall counter
+            self.fall = 0 if fall_arg is None else fall_arg
 
-        # Death & removal flags
-        self.dead = dead_arg
-        self.remove = remove_arg
+            # Death & removal flags
+            self.dead = 0 if dead_arg is None else dead_arg
+            self.remove = 0 if remove_arg is None else remove_arg
 
-        # Speed (added for later use)
-        self.speed = speed_arg
+            # Speed (added for later use)
+            self.speed = LEMMING_DEFAULT_SPEED if speed_arg is None else speed_arg
+
+        # If we provided lemming to base on then we take it's attributes over defaults
+        else:
+            if img_arg is None:
+                self.image = lemming_arg.image
+            else:
+                self.image = pygame.transform.scale(
+                    pygame.image.load(img_arg),
+                    (BLOCK_SIZE, BLOCK_SIZE))
+
+            self.rect = self.image.get_rect(x=lemming_arg.rect.x, y=lemming_arg.rect.y)
+
+            self.dirX = lemming_arg.dirX if direction_x is None else direction_x
+            self.dirY = lemming_arg.dirY if direction_y is None else direction_y
+
+            self.fall = lemming_arg.fall if fall_arg is None else fall_arg
+
+            self.dead = lemming_arg.dead if dead_arg is None else dead_arg
+            self.remove = lemming_arg.remove if remove_arg is None else remove_arg
+
+            self.speed = lemming_arg.speed if speed_arg is None else speed_arg
 
     def __del__(self, img=LEMMING_GRAPHICS_DEAD):
         """
@@ -170,15 +193,13 @@ class LemmingStopper (Lemming):
     """
     # This extended class is going to represent the lemming with a stopper function.
     """
-    def __init__(self, lemming, img=LEMMINGS_GRAPHICS_STOPPER):
+    def __init__(self, lemming_arg, img_arg=LEMMINGS_GRAPHICS_STOPPER):
         """
         This constructor creates a stopper lemming in place of the other
         """
-        super(self.__class__, self).__init__(position_x=lemming.rect.x, position_y=lemming.rect.y, img=img,
-                                             direction_x=lemming.dirX, direction_y=lemming.dirY, fall_arg=lemming.fall,
-                                             dead_arg=lemming.dead, remove_arg=lemming.remove,
-                                             speed_arg=0)
-        lemming.remove = 1
+        super(self.__class__, self).__init__(lemming_arg.rect.x, lemming_arg.rect.y,
+                                             img_arg=img_arg, speed_arg=0, lemming_arg=lemming_arg)
+        lemming_arg.remove = 1
 
     def collision_lemmings(self, lemmings):
         for lem in lemmings:
