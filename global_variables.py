@@ -17,8 +17,10 @@ LEMMING_GRAPHICS_DEAD = "graphics/lemming_dead.png"
 OBJECT_DICT = {"F": "Floor",
                "W": "Wall",
                "S": "Entrance",
-               "E": "Exit"}
+               "E": "Exit",
+               "w": "Water"}
 OBJECT_GRAPHICS_FLOOR = "graphics/floor.png"
 OBJECT_GRAPHICS_WALL = "graphics/wall.png"
 OBJECT_GRAPHICS_ENTRANCE = "graphics/entrance.png"
 OBJECT_GRAPHICS_EXIT = "graphics/exit.png"
+OBJECT_GRAPHICS_WATER = "graphics/water.png"

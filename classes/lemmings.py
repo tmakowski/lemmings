@@ -106,22 +106,43 @@ class Lemming:
                 # If it was falling, then stop the fall and reset the fall counter
                 self.dirY = 0
                 self.fall = 0
+
+            # Colliding the lemming with the sides of the floors that are at the same level or above him
+            self.collision_wall([floor for floor in floors if self.rect.y >= floor.rect.y])
         else:
 
             # If the lemming slipped of the floor then make it start falling
             self.dirY = 1
+
         return self
 
     def collision_entrance(self, entrances):
         pass
 
     def collision_exit(self, exits):
+        """
+        Method marks the lemming as a one that safely left through exit and increases the counter of said exit
+        """
         for obj_exit in exits:
             if (self.rect.colliderect(obj_exit.rect) and
                     self.rect.left == obj_exit.rect.left and
                     self.rect.right == obj_exit.rect.right):
                 obj_exit.lemming_exit_number += 1
                 self.exit = 1
+                break
+        return self
+
+    def collision_water(self, waters):
+        """
+        Method to kill lemmings on contact with water
+        """
+
+        for water in waters:
+            if (self.rect.colliderect(water.rect) and
+                    self.rect.left == water.rect.left and
+                    self.rect.right == water.rect.right):
+                self.__del__()
+                break
         return self
 
 

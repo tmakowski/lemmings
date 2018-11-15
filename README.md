@@ -1,10 +1,8 @@
 # lemmings
-## Questions
-- [ ] Should I delete every field of the Lemming in it's destructor?
 
 ## Game's development note
 #### Loop structure
-1. [x] Exit if game was closed.
+1. Exit if game was closed.
 1. [ ] Objects collisions:
     1. [ ] water,
     1. [ ] exit.
@@ -26,28 +24,31 @@
 - [x] Added collision with floors.
 - [x] Created destructor.
 - [x] Implemented falling.
+- [x] Implemented main collision method.
 - [ ] Implement additional lemming types:
     - [ ] blocker,
     - [ ] miner,
     - [ ] parachute lemming,
     - [ ] step placer,
-    - [ ] teleport-builder.
+    - [ ] teleport-builder,
+    - [ ] time-twister.
 
 #### Objects
 - [x] Added walls. 
 - [x] Added floors.
 - [x] Implement falling (use angled walls as a floor).
-- [ ] Extend floor class to water:
-    - [ ] Make it kill lemmings on contact.
+- [x] Change walls to be class extension of the floor. Tbh I don't think it'd be that useful.
+- [x] Extend floor class to water:
+    - [x] Make it kill lemmings on contact.
 - [ ] Extend floor class to steps:
     - [ ] on collision move lemming onto the first step,
     - [ ] ensure that the difference between the step level and the current level is below a certain threshold.
-- [ ] Implement entrance:
-    - [ ] Generates lemmings.
-    - [ ] Generates lemmings with globally set interval.
-- [ ] Implement exit:    
-    - [ ] delete lemmings when they move onto the exit block,
-    - [ ] have a variable counting number of lemmings that made it to the exit.
+- [x] Implement entrance:
+    - [x] Generates lemmings.
+    - [x] Generates lemmings with globally set interval.
+- [x] Implement exit:    
+    - [x] delete lemmings when they move onto the exit block,
+    - [x] have a variable counting number of lemmings that made it to the exit.
     
 #### Level tied stuff
 - [ ] Timer.
@@ -55,12 +56,12 @@
     - [ ] how many of them were spawned by the entrance,
     - [ ] how many are still alive (percentage),
     - [ ] ... 
-- [ ] Create level translator, that is a function to generate map from provided manually created layout:
-    * **Dictionaries will come in handy!**
-    - [ ] **B**: map **b**order wall,
-    - [ ] **W**: **w**ater,
-    - [ ] **S**: **s**tarting point (entrance),
-    - [ ] **E**: **e**xit,
+- [x] Create level translator, that is a function to generate map from provided manually created layout:
+    - [x] **W**: map border **w**all,
+    - [x] **F**: floor,
+    - [x] **w**: **w**ater,
+    - [x] **S**: **s**tarting point (entrance),
+    - [x] **E**: **e**xit,
     - [ ] ...
 - [ ] Create tutorial levels -- about 3-5 of them:
     - [ ] should contain tips,
@@ -86,8 +87,9 @@
     - exit to main menu.
 
 #### Other
-- [ ] One file with all global variables.
-- [ ] Define block's size (equal to lemming's size).
+- [x] One file with all global variables.
+- [x] Define block's size (equal to lemming's size).
+- [x] Cleaned up importing modules.
 - [ ] Implement game saving:
     - [ ] save lemmings as a dictionary where the keys are the attributes,
     - [ ] save the map layout,
@@ -107,4 +109,4 @@
     - detailed info on lemmings' deaths.
 - Random level generator.
 - In-game menu and main menu merge.
-- Change walls to be class extension of the floor. Tbh I don't think it'd be that useful.
+

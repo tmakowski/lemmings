@@ -19,13 +19,13 @@ level = [
     "W      W           W",
     "WF FFFFF           W",
     "W                  W",
-    "W     E            W",
+    "W                  W",
     "WFFFFFF            W",
     "W                  W",
-    "W                  W",
-    "W                  W",
-    "W                  W",
-    "W                  W",
+    "W S W              W",
+    "W FFF              W",
+    "W      E           W",
+    "WFFFww             W",
     "WFFFFFFFFFFFFFFFFFFW"]
 
 
@@ -35,6 +35,7 @@ screen = pygame.display.set_mode(LEVEL_SIZE)    # setting screen of the globally
 objects_dictionarized = generate_level(level)   # generating objects based on the level visualization
 lemmings = []                                   # initializing a list for lemmings
 dev_timer = 0
+
 
 while True:
     for event in pygame.event.get():

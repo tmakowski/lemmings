@@ -2,7 +2,7 @@ import pygame
 
 from classes.lemmings import Lemming
 from global_variables import BLOCK_SIZE,\
-    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT
+    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER
 
 
 class Floor:
@@ -22,7 +22,7 @@ class Floor:
         # Scaling and loading the image
         self.image = pygame.transform.scale(
                         pygame.image.load(img),
-                        (BLOCK_SIZE * length_x, BLOCK_SIZE * length_y))
+                        (int(BLOCK_SIZE * length_x), int(BLOCK_SIZE * length_y)))
 
         # Creating the hitbox
         self.rect = self.image.get_rect(x=position_x, y=position_y)
@@ -79,3 +79,13 @@ class Exit (Floor):
 
         # Counts how many lemmings left through that exit
         self.lemming_exit_number = 0
+
+
+class Water (Floor):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+        """
+        Calls the constructor of the parent class (Floor) with an image representing a water.
+        """
+        super(self.__class__, self).__init__(position_x, position_y,#+0.5*BLOCK_SIZE,
+                                             length_x, length_y,
+                                             img=OBJECT_GRAPHICS_WATER)
