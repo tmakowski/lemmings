@@ -32,23 +32,23 @@ class Wall (Floor):
     """
     Subclass representing the walls.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_WALL):
         """
         Calls the constructor from parent class (Floor) with an image representing a wall.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_WALL)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
 
 
 class Entrance (Floor):
     """
     Subclass representing the level entrance.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_ENTRANCE):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
         Additionally we set a timer and counter variables used during lemmings' spawning.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_ENTRANCE)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
 
         # Used to count frames between next lemmings spawns
         self.spawn_timer = 0
@@ -70,22 +70,20 @@ class Entrance (Floor):
 
 
 class Exit (Floor):
-    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_EXIT):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
         Additionally we set a counter for how many lemmings made it to that exit
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img=OBJECT_GRAPHICS_EXIT)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
 
         # Counts how many lemmings left through that exit
         self.lemming_exit_number = 0
 
 
 class Water (Floor):
-    def __init__(self, position_x, position_y, length_x=None, length_y=None):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_WATER):
         """
         Calls the constructor of the parent class (Floor) with an image representing a water.
         """
-        super(self.__class__, self).__init__(position_x, position_y,#+0.5*BLOCK_SIZE,
-                                             length_x, length_y,
-                                             img=OBJECT_GRAPHICS_WATER)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
