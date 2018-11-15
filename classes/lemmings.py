@@ -52,7 +52,7 @@ class Lemming:
                     pygame.image.load(img_arg),
                     (BLOCK_SIZE, BLOCK_SIZE))
 
-            self.rect = self.image.get_rect(x=lemming_arg.rect.x, y=lemming_arg.rect.y)
+            self.rect = self.image.get_rect(x=position_x, y=position_y)
 
             self.dirX = lemming_arg.dirX if direction_x is None else direction_x
             self.dirY = lemming_arg.dirY if direction_y is None else direction_y

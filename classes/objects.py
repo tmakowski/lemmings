@@ -87,3 +87,25 @@ class Water (Floor):
         Calls the constructor of the parent class (Floor) with an image representing a water.
         """
         super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+
+
+class MenuButton (Floor):
+    """
+    Class representing
+    """
+    def __init__(self, position_x, position_y, img, action_arg, text_arg, text_font_arg, text_color_arg,
+                 length_x=None, length_y=None):
+        """
+        Calls the constructor from parent class (Floor) with a selected image.
+        """
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+
+        # Saving the text
+        self.text = text_font_arg.render(text_arg, False, text_color_arg)
+
+        # self.text.rect = self.text.get_rect(x=int((self.rect.width-self.text.get_rect().width)/2), y=self.rect.y)
+
+        self.text_rect = self.text.get_rect(center=(self.rect.x+self.rect.width/2, self.rect.y+self.rect.height/2))
+
+        # Types like: start, load, save, exit etc.
+        self.action = action_arg
