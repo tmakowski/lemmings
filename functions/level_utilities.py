@@ -3,7 +3,7 @@ The purpose of this module is translating text visualization of the map to the p
 """
 import classes.objects
 from classes.lemmings import Lemming
-from global_variables import BLOCK_SIZE, OBJECT_DICT
+from global_variables import BLOCK_SIZE, OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS
 
 code_to_class_dict = dict([
     (code, getattr(classes.objects, class_name))
@@ -66,7 +66,7 @@ def level_load_lemmings(file_name, path="./"):
     Function creates list of lemmings based on a file provided
     """
     lemmings = []
-    with open(path+file_name, "r") as f:
+    with open(path + file_name, "r") as f:
         for line in f:
             # Reading the line as a list
             lem_input = eval(line.encode('utf-8'))
@@ -86,12 +86,13 @@ def level_load_lemmings(file_name, path="./"):
                 lemmings.append(getattr(classes.lemmings, class_name)(lemming_arg=lem_output))
     return lemmings
 
+
 def level_load_objects(file_name, path="./"):
     """
     Function creates list of objects based on file input (at the end we sort objects to dictionary).
     """
     objects = []
-    with open(path+file_name, "r") as f:
+    with open(path + file_name, "r") as f:
         for line in f:
             # Reading the line as a list
             obj_input = eval(line.encode('utf-8'))
@@ -106,4 +107,28 @@ def level_load_objects(file_name, path="./"):
                 getattr(classes.objects, class_name)
                 (position_x=position_x, position_y=position_y, attribute_dict=attribute_dict))
 
-    return objects
+    return sort_objects_to_dict(objects)
+
+
+def level_load_save(save_slot, path=None):
+    if path is None:
+        path = "." + SAVE_PATH + str(save_slot) + "/"
+
+    lemmings = level_load_lemmings(SAVE_LEMMINGS, path)
+    objects_dictionarized = level_load_objects(SAVE_OBJECTS, path)
+
+    return lemmings, objects_dictionarized
+
+
+def level_save(save_slot, lemmings, objects_dictionarized, path=None):
+    if path is None:
+        path = "." + SAVE_PATH + str(save_slot) + "/"
+
+    with open(path + SAVE_OBJECTS, "w") as f:
+        for obj_type in objects_dictionarized.values():
+            for obj in obj_type:
+                print(obj, file=f)
+
+    with open(path + SAVE_LEMMINGS, "w") as f:
+        for lem in lemmings:
+            print(lem, file=f)

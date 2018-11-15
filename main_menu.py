@@ -3,7 +3,7 @@ import sys
 import os
 
 from classes.objects import MenuButton
-from level_runner import level_run
+from functions.level_runner import level_run
 from global_variables import BLOCK_SIZE
 
 
@@ -47,7 +47,7 @@ while True:
                 if button.rect.collidepoint(click_pos):
 
                     if button == button_start:
-                        button_to_action_dict[button]("level.txt", lemmings_spawn_number, lemmings_spawn_rate, "lemmings.txt")
+                        button_to_action_dict[button](lemmings_spawn_number, lemmings_spawn_rate, level_file="./level.txt", save_slot=2)
                     else:
                         button_to_action_dict[button]()
 

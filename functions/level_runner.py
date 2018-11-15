@@ -3,23 +3,25 @@ import pygame
 import sys
 import time
 
-from level_utilities import level_generate, level_import_layout, level_load_lemmings
-from global_variables import BLOCK_SIZE,\
-    LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
+from functions.level_utilities import level_generate, level_import_layout, level_load_save, level_save
+from global_variables import LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 # from classes.lemmings import *
 
 
-def level_run(level_file, lemmings_spawn_number, lemmings_spawn_rate, lemmings_file=None):
+def level_run(lemmings_spawn_number, lemmings_spawn_rate, level_file=None, save_slot=None):
     # Level startup
     pygame.init()
     screen = pygame.display.set_mode(LEVEL_SIZE)        # setting screen of the globally set size
-    level = level_import_layout(level_file)
-    objects_dictionarized = level_generate(level)       # generating objects based on the level visualization
-    if lemmings_file is None:
+    if save_slot is None:
         lemmings = []                                   # initializing a list for lemmings if those weren't provided
+        level = level_import_layout(level_file)         # importing level layout
+        objects_dictionarized = level_generate(level)   # generating objects based on the level visualization
     else:
-        lemmings = level_load_lemmings(lemmings_file)
+        lemmings, objects_dictionarized = level_load_save(save_slot)
         lemmings_spawn_number = 0
+
+    # level = level_import_layout(level_file)  # importing level layout
+    # objects_dictionarized = level_generate(level)  # generating objects based on the level visualization
 
     dev_timer = 0
 
@@ -33,7 +35,7 @@ def level_run(level_file, lemmings_spawn_number, lemmings_spawn_rate, lemmings_f
                 pos = pygame.mouse.get_pos()
                 clicked = [s for s in lemmings if s.rect.collidepoint(pos)]
                 for lem in clicked:
-                    print(lem)
+                    level_save(2, lemmings, objects_dictionarized)
                     lemmings.remove(lem)
 
     # Spawning lemmings

@@ -25,3 +25,10 @@ OBJECT_GRAPHICS_WALL = "graphics/wall.png"
 OBJECT_GRAPHICS_ENTRANCE = "graphics/entrance.png"
 OBJECT_GRAPHICS_EXIT = "graphics/exit.png"
 OBJECT_GRAPHICS_WATER = "graphics/water.png"
+
+#
+SAVE_PATH = "/saves/save"
+SAVE_LEMMINGS = "lemmings.txt"
+SAVE_OBJECTS = "objects.txt"
+
+

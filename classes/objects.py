@@ -86,6 +86,12 @@ class Entrance (Floor):
         # Counts how many lemmings were spawned
         self.spawn_counter = 0
 
+    def __dir__(self):
+        """
+        Exit's attributes.
+        """
+        return ["image_name", "length_x", "length_y", "spawn_timer", "spawn_counter"]
+
     def spawn(self, lemmings, spawn_rate, spawn_number, lem_type=Lemming):
         """
         Method used to spawn lemmings at a set spawn rate and of the chosen lemming type.
@@ -114,7 +120,7 @@ class Exit (Floor):
 
     def __dir__(self):
         """
-        Floors' and it derivatives attributes.
+        Exit's attributes.
         """
         return ["image_name", "length_x", "length_y", "lemming_exit_number"]
 
