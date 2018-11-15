@@ -85,3 +85,25 @@ def level_load_lemmings(file_name, path="./"):
             else:
                 lemmings.append(getattr(classes.lemmings, class_name)(lemming_arg=lem_output))
     return lemmings
+
+def level_load_objects(file_name, path="./"):
+    """
+    Function creates list of objects based on file input (at the end we sort objects to dictionary).
+    """
+    objects = []
+    with open(path+file_name, "r") as f:
+        for line in f:
+            # Reading the line as a list
+            obj_input = eval(line.encode('utf-8'))
+
+            # Reading the attributes
+            class_name = obj_input[0]
+            position_x, position_y = obj_input[1]
+            attribute_dict = eval(obj_input[2])
+
+            # Creating output lemming
+            objects.append(
+                getattr(classes.objects, class_name)
+                (position_x=position_x, position_y=position_y, attribute_dict=attribute_dict))
+
+    return objects

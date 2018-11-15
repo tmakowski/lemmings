@@ -9,46 +9,76 @@ class Floor:
     """
     Parent class for all objects' classes.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_FLOOR):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 img=OBJECT_GRAPHICS_FLOOR,
+                 attribute_dict=None):
         """
         Creates new floor at position (x, y) that can be stretched by providing length_x/_y factors.
         """
-        # Default values for scaling
-        if length_x is None:
-            length_x = 1
-        if length_y is None:
-            length_y = 1
+        if attribute_dict is None:
+            # Values for scaling
+            self.length_x = 1 if length_x is None else length_x
+            self.length_y = 1 if length_y is None else length_y
 
-        # Scaling and loading the image
-        self.image = pygame.transform.scale(
-                        pygame.image.load(img),
-                        (int(BLOCK_SIZE * length_x), int(BLOCK_SIZE * length_y)))
+            # Scaling and loading the image
+            self.image_name = img
+            self.image = pygame.transform.scale(
+                            pygame.image.load(self.image_name),
+                            (int(BLOCK_SIZE * self.length_x), int(BLOCK_SIZE * self.length_y)))
 
-        # Creating the hitbox
-        self.rect = self.image.get_rect(x=position_x, y=position_y)
+            # Creating the hitbox
+            self.rect = self.image.get_rect(x=position_x, y=position_y)
+
+        # Used during reading from file
+        else:
+            for (attr, value) in attribute_dict.items():
+                setattr(self, attr, value)
+            self.image = pygame.transform.scale(
+                    pygame.image.load(self.image_name),
+                    (BLOCK_SIZE * self.length_x, BLOCK_SIZE * self.length_y))
+            self.rect = self.image.get_rect(x=position_x, y=position_y)
+
+    def __dir__(self):
+        """
+        Floors' and it derivatives attributes.
+        """
+        return ["image_name", "length_x", "length_y"]
+
+    def __str__(self):
+        """
+        Prints a list of [class, dictionary] where the dictionary contains each attribute and it's value.
+        """
+        attribute_dict = {}
+        for attr in self.__dir__():
+            attribute_dict[attr] = getattr(self, attr)
+        return [self.__class__.__name__, (self.rect.x, self.rect.y), attribute_dict.__str__()].__str__()
 
 
 class Wall (Floor):
     """
     Subclass representing the walls.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_WALL):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 img=OBJECT_GRAPHICS_WALL,
+                 attribute_dict=None):
         """
         Calls the constructor from parent class (Floor) with an image representing a wall.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
 
 
 class Entrance (Floor):
     """
     Subclass representing the level entrance.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_ENTRANCE):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 img=OBJECT_GRAPHICS_ENTRANCE,
+                 attribute_dict=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
         Additionally we set a timer and counter variables used during lemmings' spawning.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
 
         # Used to count frames between next lemmings spawns
         self.spawn_timer = 0
@@ -70,23 +100,33 @@ class Entrance (Floor):
 
 
 class Exit (Floor):
-    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_EXIT):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 img=OBJECT_GRAPHICS_EXIT,
+                 attribute_dict=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
         Additionally we set a counter for how many lemmings made it to that exit
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
 
         # Counts how many lemmings left through that exit
         self.lemming_exit_number = 0
 
+    def __dir__(self):
+        """
+        Floors' and it derivatives attributes.
+        """
+        return ["image_name", "length_x", "length_y", "lemming_exit_number"]
+
 
 class Water (Floor):
-    def __init__(self, position_x, position_y, length_x=None, length_y=None, img=OBJECT_GRAPHICS_WATER):
+    def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 img=OBJECT_GRAPHICS_WATER,
+                 attribute_dict=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing a water.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
 
 
 class MenuButton (Floor):

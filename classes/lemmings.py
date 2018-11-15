@@ -104,7 +104,7 @@ class Lemming:
         attribute_dict = {}
         for attr in self.__dir__():
             attribute_dict[attr] = getattr(self, attr)
-        return [self.__class__, (self.rect.x, self.rect.y), attribute_dict.__str__()].__str__()
+        return [self.__class__.__name__, (self.rect.x, self.rect.y), attribute_dict.__str__()].__str__()
 
     def move(self):
         """
