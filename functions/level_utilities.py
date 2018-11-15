@@ -3,13 +3,17 @@ The purpose of this module is translating text visualization of the map to the p
 """
 import classes.objects
 from classes.lemmings import Lemming
-from global_variables import BLOCK_SIZE, OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS
+from global_variables import BLOCK_DEFAULT_SIZE, OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS
 
 code_to_class_dict = dict([
     (code, getattr(classes.objects, class_name))
     for (code, class_name)
     in OBJECT_DICT.items()
 ])
+
+
+def level_interface(block_size, level_size): # może lista?
+    pass
 
 
 def level_generate(level_layout):
@@ -33,7 +37,7 @@ def level_generate(level_layout):
                 continue
 
             # Creating the objects
-            objects.append(code_to_class_dict[code](BLOCK_SIZE * offset_x, BLOCK_SIZE * offset_y))
+            objects.append(code_to_class_dict[code](BLOCK_DEFAULT_SIZE * offset_x, BLOCK_DEFAULT_SIZE * offset_y))
 
         # Moving to the next line
         offset_y += 1
@@ -111,8 +115,11 @@ def level_load_objects(file_name, path="./"):
 
 
 def level_load_save(save_slot, path=None):
+    """
+    Loads objects and lemmings from files
+    """
     if path is None:
-        path = "." + SAVE_PATH + str(save_slot) + "/"
+        path = SAVE_PATH + str(save_slot) + "/"
 
     lemmings = level_load_lemmings(SAVE_LEMMINGS, path)
     objects_dictionarized = level_load_objects(SAVE_OBJECTS, path)
@@ -122,7 +129,7 @@ def level_load_save(save_slot, path=None):
 
 def level_save(save_slot, lemmings, objects_dictionarized, path=None):
     if path is None:
-        path = "." + SAVE_PATH + str(save_slot) + "/"
+        path = SAVE_PATH + str(save_slot) + "/"
 
     with open(path + SAVE_OBJECTS, "w") as f:
         for obj_type in objects_dictionarized.values():

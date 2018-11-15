@@ -18,10 +18,7 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, level_file=None, save_
         objects_dictionarized = level_generate(level)   # generating objects based on the level visualization
     else:
         lemmings, objects_dictionarized = level_load_save(save_slot)
-        lemmings_spawn_number = 0
-
-    # level = level_import_layout(level_file)  # importing level layout
-    # objects_dictionarized = level_generate(level)  # generating objects based on the level visualization
+        lemmings_spawn_number = 0 # should be read
 
     dev_timer = 0
 
@@ -81,7 +78,6 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, level_file=None, save_
         # Changing display to show drawn objects
         pygame.display.flip()
 
-
     # System stuff
         # Setting custom pause between frames
         time.sleep(LEVEL_FRAME_TIME)
@@ -92,4 +88,3 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, level_file=None, save_
                 print("Uwaga, uwaga, tyle lemingów wyszło:", obj_exit.lemming_exit_number)
             exec(open("./main_menu.py").read())
             sys.exit()
-    return None

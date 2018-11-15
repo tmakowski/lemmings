@@ -3,7 +3,7 @@ File containing main lemming class and it's subclasses.
 """
 import pygame
 
-from global_variables import BLOCK_SIZE,\
+from global_variables import BLOCK_DEFAULT_SIZE,\
     LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
     LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMINGS_GRAPHICS_STOPPER
 
@@ -12,7 +12,7 @@ class Lemming:
     """
     This is a main lemming class which represents a lemming with no special abilities
     """
-    def __init__(self, position_x, position_y, img_arg=None,
+    def __init__(self, position_x, position_y, block_size=BLOCK_DEFAULT_SIZE, img_arg=None,
                  direction_x=None, direction_y=None, fall_arg=None,
                  dead_arg=None, remove_arg=None, speed_arg=None,
                  lemming_arg=None, attribute_dict=None):
@@ -24,7 +24,7 @@ class Lemming:
             self.image_name = LEMMING_GRAPHICS_DEFAULT if img_arg is None else img_arg
             self.image = pygame.transform.scale(
                             pygame.image.load(self.image_name),
-                            (BLOCK_SIZE, BLOCK_SIZE))
+                            (block_size, block_size))
 
             # Creating the hitbox
             self.rect = self.image.get_rect(x=position_x, y=position_y)
@@ -52,7 +52,7 @@ class Lemming:
                 self.image_name = img_arg
                 self.image = pygame.transform.scale(
                     pygame.image.load(self.image_name),
-                    (BLOCK_SIZE, BLOCK_SIZE))
+                    (block_size, block_size))
 
             self.rect = self.image.get_rect(x=position_x, y=position_y)
 
@@ -72,7 +72,7 @@ class Lemming:
                 setattr(self, attr, value)
             self.image = pygame.transform.scale(
                     pygame.image.load(self.image_name),
-                    (BLOCK_SIZE, BLOCK_SIZE))
+                    (block_size, block_size))
             self.rect = self.image.get_rect(x=position_x, y=position_y)
 
     def __del__(self, img=LEMMING_GRAPHICS_DEAD):
@@ -82,7 +82,7 @@ class Lemming:
         # Changing image to the dead version
         self.image = pygame.transform.scale(
                         pygame.image.load(img),
-                        (BLOCK_SIZE, BLOCK_SIZE))
+                        (self.image.get_rect().width, self.image.get_rect().height))
 
         # Stopping the lemming's movement (so that we can display it's dead version for a while)
         self.speed = 0
@@ -162,7 +162,7 @@ class Lemming:
         if self.rect.collidelist(floors) != -1:
 
             # Check if the lemming has passed the fall threshold
-            if self.fall > LEMMING_FALL_THRESHOLD * BLOCK_SIZE:
+            if self.fall > LEMMING_FALL_THRESHOLD * self.image.get_rect().height:
                 self.__del__()
 
             # Check if it was falling at all

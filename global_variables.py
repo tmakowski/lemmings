@@ -1,9 +1,9 @@
 #
-BLOCK_SIZE = 32
+BLOCK_DEFAULT_SIZE = 32
 
 #
-LEVEL_WIDTH = 40    # value in blocks
-LEVEL_SIZE = (int(BLOCK_SIZE * LEVEL_WIDTH), int(0.75 * BLOCK_SIZE * LEVEL_WIDTH))
+LEVEL_WIDTH = 54    # value in blocks
+LEVEL_SIZE = (int(BLOCK_DEFAULT_SIZE * LEVEL_WIDTH), int(0.5 * BLOCK_DEFAULT_SIZE * LEVEL_WIDTH))
 LEVEL_DEATH_FRAMES = 30
 LEVEL_FRAME_TIME = 0.005
 
@@ -27,7 +27,7 @@ OBJECT_GRAPHICS_EXIT = "graphics/exit.png"
 OBJECT_GRAPHICS_WATER = "graphics/water.png"
 
 #
-SAVE_PATH = "/saves/save"
+SAVE_PATH = "./saves/save"
 SAVE_LEMMINGS = "lemmings.txt"
 SAVE_OBJECTS = "objects.txt"
 

@@ -1,7 +1,7 @@
 import pygame
 
 from classes.lemmings import Lemming
-from global_variables import BLOCK_SIZE,\
+from global_variables import BLOCK_DEFAULT_SIZE,\
     OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER
 
 
@@ -9,7 +9,7 @@ class Floor:
     """
     Parent class for all objects' classes.
     """
-    def __init__(self, position_x, position_y, length_x=None, length_y=None,
+    def __init__(self, position_x, position_y, block_size=BLOCK_DEFAULT_SIZE, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_FLOOR,
                  attribute_dict=None):
         """
@@ -24,7 +24,7 @@ class Floor:
             self.image_name = img
             self.image = pygame.transform.scale(
                             pygame.image.load(self.image_name),
-                            (int(BLOCK_SIZE * self.length_x), int(BLOCK_SIZE * self.length_y)))
+                            (int(block_size * self.length_x), int(block_size * self.length_y)))
 
             # Creating the hitbox
             self.rect = self.image.get_rect(x=position_x, y=position_y)
@@ -35,7 +35,7 @@ class Floor:
                 setattr(self, attr, value)
             self.image = pygame.transform.scale(
                     pygame.image.load(self.image_name),
-                    (BLOCK_SIZE * self.length_x, BLOCK_SIZE * self.length_y))
+                    (block_size * self.length_x, block_size * self.length_y))
             self.rect = self.image.get_rect(x=position_x, y=position_y)
 
     def __dir__(self):
@@ -59,12 +59,14 @@ class Wall (Floor):
     Subclass representing the walls.
     """
     def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 block_size=BLOCK_DEFAULT_SIZE,
                  img=OBJECT_GRAPHICS_WALL,
                  attribute_dict=None):
         """
         Calls the constructor from parent class (Floor) with an image representing a wall.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
+        super(self.__class__, self).__init__(position_x, position_y, block_size,
+                                             length_x, length_y, img, attribute_dict)
 
 
 class Entrance (Floor):
@@ -72,13 +74,15 @@ class Entrance (Floor):
     Subclass representing the level entrance.
     """
     def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 block_size=BLOCK_DEFAULT_SIZE,
                  img=OBJECT_GRAPHICS_ENTRANCE,
                  attribute_dict=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
         Additionally we set a timer and counter variables used during lemmings' spawning.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
+        super(self.__class__, self).__init__(position_x, position_y, block_size,
+                                             length_x, length_y, img, attribute_dict)
 
         # Used to count frames between next lemmings spawns
         self.spawn_timer = 0
@@ -107,13 +111,15 @@ class Entrance (Floor):
 
 class Exit (Floor):
     def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 block_size=BLOCK_DEFAULT_SIZE,
                  img=OBJECT_GRAPHICS_EXIT,
                  attribute_dict=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing an entrance.
         Additionally we set a counter for how many lemmings made it to that exit
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
+        super(self.__class__, self).__init__(position_x, position_y, block_size,
+                                             length_x, length_y, img, attribute_dict)
 
         # Counts how many lemmings left through that exit
         self.lemming_exit_number = 0
@@ -127,12 +133,14 @@ class Exit (Floor):
 
 class Water (Floor):
     def __init__(self, position_x, position_y, length_x=None, length_y=None,
+                 block_size=BLOCK_DEFAULT_SIZE,
                  img=OBJECT_GRAPHICS_WATER,
                  attribute_dict=None):
         """
         Calls the constructor of the parent class (Floor) with an image representing a water.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img, attribute_dict)
+        super(self.__class__, self).__init__(position_x, position_y, block_size,
+                                             length_x, length_y, img, attribute_dict)
 
 
 class MenuButton (Floor):
@@ -140,11 +148,12 @@ class MenuButton (Floor):
     Class representing
     """
     def __init__(self, position_x, position_y, img, text_arg, text_font_arg, text_color_arg,
+                 block_size=BLOCK_DEFAULT_SIZE,
                  length_x=None, length_y=None):
         """
         Calls the constructor from parent class (Floor) with a selected image.
         """
-        super(self.__class__, self).__init__(position_x, position_y, length_x, length_y, img)
+        super(self.__class__, self).__init__(position_x, position_y, block_size, length_x, length_y, img)
 
         # Saving the text
         self.text = text_font_arg.render(text_arg, False, text_color_arg)
