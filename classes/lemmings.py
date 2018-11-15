@@ -14,12 +14,12 @@ class Lemming:
     """
     def __init__(self, position_x, position_y, img_arg=None,
                  direction_x=None, direction_y=None, fall_arg=None,
-                 dead_arg=None, remove_arg=None,
-                 speed_arg=None, lemming_arg=None):
+                 dead_arg=None, remove_arg=None, speed_arg=None,
+                 lemming_arg=None, attribute_dict=None):
         """
         Creates new lemming at position (x, y) counting from top left corner of the map with selected graphics and stats.
         """
-        if lemming_arg is None:
+        if lemming_arg is None and attribute_dict is None:
             # Assigning the image to the lemming
             self.image_name = LEMMING_GRAPHICS_DEFAULT if img_arg is None else img_arg
             self.image = pygame.transform.scale(
@@ -44,7 +44,7 @@ class Lemming:
             self.speed = LEMMING_DEFAULT_SPEED if speed_arg is None else speed_arg
 
         # If we provided lemming to base on then we take it's attributes over defaults
-        else:
+        elif attribute_dict is None:
             if img_arg is None:
                 self.image_name = lemming_arg.image_name
                 self.image = lemming_arg.image
@@ -66,6 +66,15 @@ class Lemming:
 
             self.speed = lemming_arg.speed if speed_arg is None else speed_arg
 
+        # Creating lemming based on the attribute dictionary
+        else:
+            for (attr, value) in attribute_dict.items():
+                setattr(self, attr, value)
+            self.image = pygame.transform.scale(
+                    pygame.image.load(self.image_name),
+                    (BLOCK_SIZE, BLOCK_SIZE))
+            self.rect = self.image.get_rect(x=position_x, y=position_y)
+
     def __del__(self, img=LEMMING_GRAPHICS_DEAD):
         """
         Lemming destructor... or lemming killer? Whatever. You get the point.
@@ -84,18 +93,18 @@ class Lemming:
 
     def __dir__(self):
         """
-        All lemmings' attributes.
+        Lemmings' attributes. (rect left out)
         """
-        return ["rect", "image_name", "dirX", "dirY", "fall", "dead", "remove", "speed"]
+        return ["image_name", "dirX", "dirY", "fall", "dead", "remove", "speed"]
 
     def __str__(self):
         """
-        Prints a dictionary containing each attribute and it's value.
+        Prints a list of [class, dictionary] where the dictionary contains each attribute and it's value.
         """
         attribute_dict = {}
         for attr in self.__dir__():
             attribute_dict[attr] = getattr(self, attr)
-        return attribute_dict.__str__()
+        return [self.__class__, (self.rect.x, self.rect.y), attribute_dict.__str__()].__str__()
 
     def move(self):
         """

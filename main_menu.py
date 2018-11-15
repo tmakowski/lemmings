@@ -31,22 +31,6 @@ button_to_action_dict = {button_exit: sys.exit, button_start: level_run}
 
 lemmings_spawn_number = 5                       # setting number of lemmings to spawn
 lemmings_spawn_rate = 100                       # setting number of frames between lemming spawns
-level = [
-    "WWWWWWWWWWWWWWWWWWWW",
-    "WS     F           W",
-    "W      F           W",
-    "WFFFFF F           W",
-    "W      F           W",
-    "WF  FFFF           W",
-    "W  W               W",
-    "W                  W",
-    "WFFFFFF            W",
-    "W                  W",
-    "W S F  F           W",
-    "W FFF    F         W",
-    "W      EF          W",
-    "WFFFwwwwF          W",
-    "WFFFFFFFFFFFFFFFFFFW"]
 
 while True:
     for event in pygame.event.get():
@@ -63,7 +47,7 @@ while True:
                 if button.rect.collidepoint(click_pos):
 
                     if button == button_start:
-                        button_to_action_dict[button]("level.txt", lemmings_spawn_number, lemmings_spawn_rate)
+                        button_to_action_dict[button]("level.txt", lemmings_spawn_number, lemmings_spawn_rate, "lemmings.txt")
                     else:
                         button_to_action_dict[button]()
 

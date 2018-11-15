@@ -3,19 +3,23 @@ import pygame
 import sys
 import time
 
-from level_utilities import level_generate, level_import_layout
+from level_utilities import level_generate, level_import_layout, level_load_lemmings
 from global_variables import BLOCK_SIZE,\
     LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 # from classes.lemmings import *
 
 
-def level_run(level_file, lemmings_spawn_number, lemmings_spawn_rate):
+def level_run(level_file, lemmings_spawn_number, lemmings_spawn_rate, lemmings_file=None):
     # Level startup
     pygame.init()
-    screen = pygame.display.set_mode(LEVEL_SIZE)    # setting screen of the globally set size
+    screen = pygame.display.set_mode(LEVEL_SIZE)        # setting screen of the globally set size
     level = level_import_layout(level_file)
-    objects_dictionarized = level_generate(level)   # generating objects based on the level visualization
-    lemmings = []                                   # initializing a list for lemmings
+    objects_dictionarized = level_generate(level)       # generating objects based on the level visualization
+    if lemmings_file is None:
+        lemmings = []                                   # initializing a list for lemmings if those weren't provided
+    else:
+        lemmings = level_load_lemmings(lemmings_file)
+        lemmings_spawn_number = 0
 
     dev_timer = 0
 
@@ -24,10 +28,12 @@ def level_run(level_file, lemmings_spawn_number, lemmings_spawn_rate):
             if event.type == pygame.QUIT:
                 exec(open("./main_menu.py").read())
                 sys.exit()
+
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 clicked = [s for s in lemmings if s.rect.collidepoint(pos)]
                 for lem in clicked:
+                    print(lem)
                     lemmings.remove(lem)
 
     # Spawning lemmings
