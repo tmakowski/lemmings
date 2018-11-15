@@ -3,17 +3,18 @@ import pygame
 import sys
 import time
 
-from level_generator import generate_level
+from level_utilities import level_generate, level_import_layout
 from global_variables import BLOCK_SIZE,\
     LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
-#from classes.lemmings import *
+# from classes.lemmings import *
 
 
-def run_level(level, lemmings_spawn_number, lemmings_spawn_rate):
+def level_run(level_file, lemmings_spawn_number, lemmings_spawn_rate):
     # Level startup
     pygame.init()
     screen = pygame.display.set_mode(LEVEL_SIZE)    # setting screen of the globally set size
-    objects_dictionarized = generate_level(level)   # generating objects based on the level visualization
+    level = level_import_layout(level_file)
+    objects_dictionarized = level_generate(level)   # generating objects based on the level visualization
     lemmings = []                                   # initializing a list for lemmings
 
     dev_timer = 0

@@ -2,7 +2,7 @@
 BLOCK_SIZE = 32
 
 #
-LEVEL_WIDTH = 20    # value in blocks
+LEVEL_WIDTH = 40    # value in blocks
 LEVEL_SIZE = (int(BLOCK_SIZE * LEVEL_WIDTH), int(0.75 * BLOCK_SIZE * LEVEL_WIDTH))
 LEVEL_DEATH_FRAMES = 30
 LEVEL_FRAME_TIME = 0.005

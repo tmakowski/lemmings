@@ -93,7 +93,7 @@ class MenuButton (Floor):
     """
     Class representing
     """
-    def __init__(self, position_x, position_y, img, action_arg, text_arg, text_font_arg, text_color_arg,
+    def __init__(self, position_x, position_y, img, text_arg, text_font_arg, text_color_arg,
                  length_x=None, length_y=None):
         """
         Calls the constructor from parent class (Floor) with a selected image.
@@ -103,9 +103,14 @@ class MenuButton (Floor):
         # Saving the text
         self.text = text_font_arg.render(text_arg, False, text_color_arg)
 
-        # self.text.rect = self.text.get_rect(x=int((self.rect.width-self.text.get_rect().width)/2), y=self.rect.y)
+        # Text's rectangle centered in the button's rectangle
+        self.text_rect = self.text.get_rect(center=(self.rect.x + self.rect.width/2,
+                                                    self.rect.y + self.rect.height/2))
 
-        self.text_rect = self.text.get_rect(center=(self.rect.x+self.rect.width/2, self.rect.y+self.rect.height/2))
-
-        # Types like: start, load, save, exit etc.
-        self.action = action_arg
+    def center(self, width):
+        """
+        Aligns the button to the center of a window.
+        """
+        self.rect.x = (width - self.rect.width)/2
+        self.text_rect.x = (width - self.text_rect.width)/2
+        return self

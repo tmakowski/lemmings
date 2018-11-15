@@ -11,7 +11,7 @@ code_to_class_dict = dict([
 ])
 
 
-def generate_level(level_layout):
+def level_generate(level_layout):
     """
     This function creates objects used in the level based in visualization of the level layout.
     """
@@ -47,3 +47,11 @@ def sort_objects_to_dict(objects):
     for class_name in OBJECT_DICT.values():
         objects_dictionarized[class_name] = [obj for obj in objects if obj.__class__.__name__ == class_name]
     return objects_dictionarized
+
+
+def level_import_layout(file_name, path="./"):
+    layout = []
+    with open(path+file_name, "r") as f:
+        for line in f:
+            layout.append(line.strip())
+    return layout

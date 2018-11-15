@@ -1,28 +1,30 @@
 import pygame
 import sys
-# import time
-from classes.objects import Floor, MenuButton
+import os
+
+from classes.objects import MenuButton
+from level_runner import level_run
 from global_variables import BLOCK_SIZE
 
 
+# Initialization of stuff
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (50, 50)
 pygame.init()
-# pygame.font.init()
-
 size = (width, height) = (480, 600)
 screen = pygame.display.set_mode(size)
-myfont = pygame.font.SysFont('Comic Sans MS', 32)
+button_font = pygame.font.SysFont('Verdana', 32)
 
-button1 = Floor(100, 50, length_x=5)
-button2 = Floor(300, 50, length_y=5)
-button_exit = MenuButton(width/2 - 5*BLOCK_SIZE/2, 100, length_x=5, length_y=2, img="graphics/water.png",
-                         action_arg="exit", text_arg="Exit", text_color_arg=(250, 100, 6), text_font_arg=myfont)
-button_start = MenuButton(width/2 - 5*BLOCK_SIZE/2, 500, length_x=5, length_y=2, img="graphics/water.png",
-                          action_arg="start", text_arg="Start game", text_color_arg=(250, 100, 6), text_font_arg=myfont)
+# Creating the buttons
+button_start = MenuButton(width/2 - 8*BLOCK_SIZE/2, 500, length_x=5, length_y=2, img="graphics/water.png",
+                          text_arg="Start game", text_color_arg=(250, 100, 6), text_font_arg=button_font)
 
-buttons = [button1, button2, button_exit, button_start]
+button_exit = MenuButton(width/2 - 8*BLOCK_SIZE/2, 100, length_x=5, length_y=2, img="graphics/water.png",
+                         text_arg="Exit", text_color_arg=(250, 100, 6), text_font_arg=button_font)
 
-from level_runner import run_level
-button_to_action_dict = {"exit": sys.exit, "start": run_level}
+# Packing the buttons to a list and craeting dictionary for their uses
+# buttons = [button_start, button_exit]
+button_exit.center(width)
+button_to_action_dict = {button_exit: sys.exit, button_start: level_run}
 
 
 # Settings
@@ -57,22 +59,22 @@ while True:
             click_pos = pygame.mouse.get_pos()
 
             # Performing action for each of the clicked buttons
-            for button in buttons:
-                if type(button) == MenuButton and button.action == "start":
-                    button_to_action_dict[button.action](level, lemmings_spawn_number, lemmings_spawn_rate)
-                elif button.rect.collidepoint(click_pos):
-                    button_to_action_dict[button.action]()
+            for button in button_to_action_dict.keys():
+                if button.rect.collidepoint(click_pos):
 
-            #clicked_buttons = [button for button in buttons if butt.rect.collidepoint(click_pos)]
+                    if button == button_start:
+                        button_to_action_dict[button]("level.txt", lemmings_spawn_number, lemmings_spawn_rate)
+                    else:
+                        button_to_action_dict[button]()
 
-            #for button in clicked_buttons
+    # Filling background
+    screen.fill((253, 153, 153))
 
-    screen.fill((153, 153, 153))
-    for obj in buttons:
-        screen.blit(obj.image, obj.rect)
-#        screen.blit(textsurface, obj.rect)
-    screen.blit(button_exit.image, button_exit.rect)
-    screen.blit(button_exit.text, button_exit.text_rect)
+    # Displaying buttons and their's texts
+    for button in button_to_action_dict.keys():
+        screen.blit(button.image, button.rect)
+        screen.blit(button.text, button.text_rect)
 
+    # Updating the display
     pygame.display.flip()
 
