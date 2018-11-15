@@ -1,0 +1,3 @@
+['Lemming', (32, 323), "{'image_name': 'graphics/lemming2.png', 'dirX': -1, 'dirY': 1, 'fall': 2, 'dead': 0, 'remove': 0, 'speed': 1}"]
+['Lemming', (192, 97), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 1, 'fall': 32, 'dead': 0, 'remove': 0, 'speed': 1}"]
+['Lemming', (122, 65), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1}"]
