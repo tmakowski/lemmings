@@ -95,6 +95,9 @@ class Lemming:
         self.dead = 1
         return None
 
+    def removal(self, objects_dictionarized):
+        self.remove = 1
+
     def __dir__(self):
         """
         Lemmings' attributes. (rect left out)
@@ -242,16 +245,20 @@ class LemmingStopper (Lemming):
                                              block_size=lemming_arg.image.get_rect().height,
                                              img_arg=img_arg, speed_arg=0,
                                              lemming_arg=lemming_arg, attribute_dict=attribute_dict)
-        lemming_arg.remove = 1
+
+        lemming_arg.removal(objects_dictionarized)
 
         objects_dictionarized["Stoppers"].append(self)
+
+    def removal(self, objects_dictionarized):
+        objects_dictionarized["Stoppers"].remove(self)
+        self.remove = 1
 
     def on_click(self, click_position, objects_dictionarized, lemmings):
         if self.rect.collidepoint(click_position):
             lemmings.append(Lemming(self.rect.x, self.rect.y, self.rect.height, img_arg=LEMMING_GRAPHICS_DEFAULT,
                                     speed_arg=1, lemming_arg=self))
-            objects_dictionarized["Stoppers"].remove(self)
-            self.remove = 1
+            self.removal(objects_dictionarized)
         return lemmings, objects_dictionarized
 
     def collision_lemmings(self, lemmings):
@@ -268,9 +275,10 @@ class LemmingAntiGravity (Lemming):
         """
         super(self.__class__, self).__init__(lemming_arg.rect.x, lemming_arg.rect.y,
                                              block_size=lemming_arg.image.get_rect().height,
-                                             img_arg=img_arg,
+                                             img_arg=img_arg, speed_arg=LEMMING_DEFAULT_SPEED,
                                              lemming_arg=lemming_arg, attribute_dict=attribute_dict)
-        lemming_arg.remove = 1
+
+        lemming_arg.removal(objects_dictionarized)
         self.rect.y -= 2
         self.fall -= 2
 
@@ -278,7 +286,8 @@ class LemmingAntiGravity (Lemming):
         if self.rect.collidepoint(click_position):
             lemmings.append(Lemming(self.rect.x, self.rect.y+2, self.rect.height, img_arg=LEMMING_GRAPHICS_DEFAULT,
                                     fall_arg=0, lemming_arg=self))
-            self.remove = 1
+
+            self.removal(objects_dictionarized)
 
     def collision_floor(self, floors):
         """
