@@ -13,7 +13,19 @@ code_to_class_dict = dict([
 
 
 def level_interface(block_size, level_size):  # może lista?
-    pass
+    ui_width = level_size[0]//block_size
+    ui_height = 3
+    ui_start = level_size[1] - block_size * ui_height
+    # button ( ....)
+
+    interface_dict = {"Buttons": [
+        classes.objects.LevelInterfaceButton(position_x=0, position_y=ui_start, block_size=block_size,
+                                             length_y=ui_height, class_name_arg="LemmingStopper"),
+        classes.objects.LevelInterfaceButton(position_x=2*block_size, position_y=ui_start, block_size=block_size,
+                                             length_y=ui_height)]}
+
+    # return dict with (dict : button->[charges, type], level stats - spawn rate etc.
+    return interface_dict
 
 
 def level_generate(level_layout, block_size):
@@ -65,7 +77,7 @@ def level_import_layout(file_name, path="./"):
     return layout
 
 
-def level_load_lemmings(file_name, block_size, path="./"):
+def level_load_lemmings(file_name, block_size, objects_dictionarized, path="./"):
     """
     Function creates list of lemmings based on a file provided
     """
@@ -88,7 +100,9 @@ def level_load_lemmings(file_name, block_size, path="./"):
             if class_name == "Lemming":
                 lemmings.append(lem_output)
             else:
-                lemmings.append(getattr(classes.lemmings, class_name)(lemming_arg=lem_output))
+                lemmings.append(getattr(classes.lemmings, class_name)
+                                (lemming_arg=lem_output, objects_dictionarized=objects_dictionarized,
+                                 attribute_dict=attribute_dict))
     return lemmings
 
 
@@ -122,8 +136,8 @@ def level_load_save(save_slot, block_size, path=None):
     if path is None:
         path = SAVE_PATH + str(save_slot) + "/"
 
-    lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, path)
     objects_dictionarized = level_load_objects(SAVE_OBJECTS, block_size, path)
+    lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, objects_dictionarized, path)
 
     return lemmings, objects_dictionarized
 

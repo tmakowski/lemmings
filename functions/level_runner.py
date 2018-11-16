@@ -3,23 +3,31 @@ import pygame
 import sys
 import time
 
-from functions.level_utilities import level_generate, level_import_layout, level_load_save, level_save
-from global_variables import LEVEL_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
+import classes.lemmings
+from functions.level_utilities import level_generate, level_interface, level_import_layout, level_load_save, level_save
+from global_variables import LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 # from classes.lemmings import *
 
 
 def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file=None, save_slot=None):
     # Level startup
     pygame.init()
-    screen = pygame.display.set_mode(LEVEL_SIZE)                    # setting screen of the globally set size
+    level_width = 54
+    level_size = (int(block_size * level_width), int(0.5 * block_size * level_width))
+    screen = pygame.display.set_mode(level_size)                    # setting screen of the globally set size
     if save_slot is None:
-        lemmings = []                                               # initializing a list for lemmings if those weren't provided
-        level = level_import_layout(level_file)                     # importing level layout
-        objects_dictionarized = level_generate(level, block_size)   # generating objects based on the level visualization
+        lemmings = []                                     # initializing a list for lemmings if those weren't provided
+        level = level_import_layout(level_file)                    # importing level layout
+        objects_dictionarized = level_generate(level, block_size)  # generating objects based on the level visualization
     else:
         lemmings, objects_dictionarized = level_load_save(save_slot, block_size)
         lemmings_spawn_number = 0 # should be read
 
+    #objects_dictionarized["Stoppers"] = []
+    interface = level_interface(block_size, level_size)
+    # usuwać klucz Stoppers na końcu!!
+
+    method_to_use = None
     dev_timer = 0
 
     while True:
@@ -29,15 +37,33 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONUP:
-                pos = pygame.mouse.get_pos()
-                clicked = [s for s in lemmings if s.rect.collidepoint(pos)]
-                for lem in clicked:
-                    level_save(2, lemmings, objects_dictionarized)
-                    lemmings.remove(lem)
+                click_position = pygame.mouse.get_pos()
+                clicked = [s for s in lemmings if s.rect.collidepoint(click_position)]
+
+                for button in interface["Buttons"]:
+                    if button.rect.collidepoint(click_position):
+                        if button.class_name is not None:
+                            method_to_use = getattr(classes.lemmings, button.class_name)
+                            break
+                        # jakiś efekt kliknięcia
+                        else:
+                            obj_dict = objects_dictionarized.copy()
+                            obj_dict.pop("Stoppers")
+                            level_save(3, lemmings, obj_dict)
+                            del obj_dict
+
+                if method_to_use is not None:
+                    for lem in lemmings:
+                        if lem.rect.collidepoint(click_position):
+                            lemmings.append(method_to_use(lemming_arg=lem, objects_dictionarized=objects_dictionarized))
+                            method_to_use = None
+                            # charges -= 1
+                            # wyłączyć efekt kliknięcia
+                            break
 
     # Spawning lemmings
         for obj_entrance in objects_dictionarized["Entrance"]:
-            obj_entrance.spawn(lemmings, block_size=block_size, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
+            obj_entrance.spawn(lemmings, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
 
     # Performing actions for each lemming
         for lem in lemmings:
@@ -72,7 +98,9 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file
         screen.fill((0, 0, 0))
 
         # Drawing lemmings and all objects
-        for obj in lemmings+list(chain.from_iterable(objects_dictionarized.values())):
+        for obj in (lemmings
+                    + list(chain.from_iterable(objects_dictionarized.values()))
+                    + interface["Buttons"]):
             screen.blit(obj.image, obj.rect)
 
         # Changing display to show drawn objects

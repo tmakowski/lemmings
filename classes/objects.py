@@ -94,7 +94,7 @@ class Entrance (Floor):
         """
         return ["image_name", "length_x", "length_y", "spawn_timer", "spawn_counter"]
 
-    def spawn(self, lemmings, block_size, spawn_rate, spawn_number, lem_type=Lemming):
+    def spawn(self, lemmings, spawn_rate, spawn_number, lem_type=Lemming):
         """
         Method used to spawn lemmings at a set spawn rate and of the chosen lemming type.
         """
@@ -102,7 +102,7 @@ class Entrance (Floor):
 
         # If the spawn counter reaches provided threshold then spawn a lemming and reset the counter
         if self.spawn_timer == spawn_rate and self.spawn_counter < spawn_number:
-            lemmings.append(lem_type(self.rect.x, self.rect.y, block_size))
+            lemmings.append(lem_type(self.rect.x, self.rect.y, block_size=self.image.get_rect().height))
             self.spawn_counter += 1
             self.spawn_timer = 0
 
@@ -164,3 +164,17 @@ class MenuButton (Floor):
         self.rect.x = (width - self.rect.width)/2
         self.text_rect.x = (width - self.text_rect.width)/2
         return self
+
+
+class LevelInterfaceButton (Floor):
+    def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
+                 img=OBJECT_GRAPHICS_WATER,
+                 class_name_arg=None,
+                 attribute_dict=None):
+        super(self.__class__, self).__init__(position_x, position_y, block_size,
+                                             length_x, length_y, img, attribute_dict)
+
+        self.class_name = class_name_arg
+
+    def __dir__(self):
+        return ["image_name", "length_x", "length_y", "class_name"]

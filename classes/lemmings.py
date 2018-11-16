@@ -13,7 +13,7 @@ class Lemming:
     """
     def __init__(self, position_x, position_y, block_size, img_arg=None,
                  direction_x=None, direction_y=None, fall_arg=None,
-                 dead_arg=None, remove_arg=None, speed_arg=None,
+                 dead_arg=None, remove_arg=None, speed_arg=None, unstuck_arg=None,
                  lemming_arg=None, attribute_dict=None):
         """
         Creates new lemming at position (x, y) counting from top left corner of the map with selected graphics and stats.
@@ -42,6 +42,9 @@ class Lemming:
             # Speed (added for later use)
             self.speed = LEMMING_DEFAULT_SPEED if speed_arg is None else speed_arg
 
+            # Collision grace period after falling (used for stopper lemmings collisions)
+            self.unstuck = 0 if unstuck_arg is None else unstuck_arg
+
         # If we provided lemming to base on then we take it's attributes over defaults
         elif attribute_dict is None:
             if img_arg is None:
@@ -64,6 +67,8 @@ class Lemming:
             self.remove = lemming_arg.remove if remove_arg is None else remove_arg
 
             self.speed = lemming_arg.speed if speed_arg is None else speed_arg
+
+            self.unstuck = lemming_arg.unstuck if unstuck_arg is None else unstuck_arg
 
         # Creating lemming based on the attribute dictionary
         else:
@@ -94,7 +99,7 @@ class Lemming:
         """
         Lemmings' attributes. (rect left out)
         """
-        return ["image_name", "dirX", "dirY", "fall", "dead", "remove", "speed"]
+        return ["image_name", "dirX", "dirY", "fall", "dead", "remove", "speed", "unstuck"]
 
     def __str__(self):
         """
@@ -131,14 +136,14 @@ class Lemming:
         for key in dict_objects.keys():
 
             # Walls and floors are handled below
-            if key in ["Wall", "Floor"]:
+            if key in ["Wall", "Floor", "Stoppers"]:
                 continue
 
             method = getattr(self, "collision_" + key.lower())
             method(dict_objects[key])
 
         # Treating walls as a floors to avoid some shenanigans (we want lemmings to step off of the top of the walls)
-        self.collision_floor(dict_objects["Wall"]+dict_objects["Floor"])
+        self.collision_floor(dict_objects["Wall"]+dict_objects["Floor"]+dict_objects["Stoppers"])
 
         return self
 
@@ -174,6 +179,7 @@ class Lemming:
             # Colliding the lemming with the sides of the floors/walls that are not directly below him
             if self.rect.collidelist([floor for floor in floors if abs(self.rect.bottom-floor.rect.top) > 1]) != -1:
                 self.dirX *= -1
+
         else:
 
             # If the lemming slipped of the floor then make it start falling
@@ -218,16 +224,38 @@ class LemmingStopper (Lemming):
     """
     # This extended class is going to represent the lemming with a stopper function.
     """
-    def __init__(self, lemming_arg, img_arg=LEMMINGS_GRAPHICS_STOPPER):
+    def __init__(self, lemming_arg, objects_dictionarized, attribute_dict=None, img_arg=LEMMINGS_GRAPHICS_STOPPER):
         """
         This constructor creates a stopper lemming in place of the other
         """
         super(self.__class__, self).__init__(lemming_arg.rect.x, lemming_arg.rect.y,
                                              block_size=lemming_arg.image.get_rect().height,
-                                             img_arg=img_arg, speed_arg=0, lemming_arg=lemming_arg)
+                                             img_arg=img_arg, direction_x=0,
+                                             lemming_arg=lemming_arg, attribute_dict=attribute_dict)
         lemming_arg.remove = 1
 
+        if "Stoppers" in objects_dictionarized.keys():
+            objects_dictionarized["Stoppers"].append(self)
+        else:
+            objects_dictionarized["Stoppers"] = [self]
+
     def collision_lemmings(self, lemmings):
-        for lem in lemmings:
-            if self.rect.colliderect(lem.rect):
-                lem.dirX *= -1
+        pass
+
+    def collision_floor(self, floors):
+        pass
+        # for lem in lemmings:
+        #     lem.collision_floor()
+            # if self.rect.colliderect(lem.rect):
+            #     lem.dirX *= -1
+            #     lem.grace = lem.image.get_rect().width + 2
+            # else:
+            #     lem.grace = 0
+
+            # to działa chyba, że lemming spadnie na blockera
+                # if (lem.fall == 0
+                #         and abs(self.rect.left - lem.rect.left) < 2
+                #         and abs(self.rect.right - lem.rect.right) < 2
+                #         and self.rect.left >= lem.rect.right
+                #         and self.rect.right <= lem.rect.left):
+                #     lem.dirX *= -1
