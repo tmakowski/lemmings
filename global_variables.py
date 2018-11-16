@@ -32,6 +32,9 @@ CLASS_TO_GRAPHICS_DICT = {
     "LemmingAntiGravity": LEMMING_GRAPHICS_ANTIGRAVITY}
 
 #
+SOUND_VICTORY = "sound/victory.mp3"
+
+#
 SAVE_PATH = "./saves/save"
 SAVE_LEMMINGS = "lemmings.txt"
 SAVE_OBJECTS = "objects.txt"
@@ -39,12 +42,14 @@ SAVE_STATS = "stats.txt"
 
 LEVEL_PATH = "./levels/level"
 LEVEL_LAYOUT = "level.txt"
+LEVEL_BACKGROUND_COLOR = (46, 49, 49)
+LEVEL_TEXT_COLOR = (245, 229, 27)
 
-INTERFACE_LEVEL_BAR = "graphics/exit.png"
+INTERFACE_LEVEL_BAR = "graphics/level_bar.png"
 INTERFACE_LEVEL_EXIT = "graphics/level_exit.png"
-INTERFACE_LEVEL_SAVE = "graphics/level_save.png"
+INTERFACE_LEVEL_SAVE = "graphics/level_save_"
 INTERFACE_LEVEL_PAUSE = "graphics/level_pause.png"
-INTERFACE_BUTTONS = "graphics/water.png"
+INTERFACE_BUTTONS = "graphics/level_bar.png"
 INTERFACE_DEFAULT_SIZE = (480, 600)
-INTERFACE_TEXT_COLOR = (250, 100, 6)
-INTERFACE_BACKGROUND_COLOR = (253, 153, 153)
+INTERFACE_TEXT_COLOR = (245, 229, 27)
+INTERFACE_BACKGROUND_COLOR = (46, 49, 49)

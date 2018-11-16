@@ -2,7 +2,8 @@ import pygame
 
 from classes.lemmings import Lemming
 from global_variables import \
-    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER
+    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER,\
+    INTERFACE_BUTTONS
 
 
 class Floor:
@@ -168,7 +169,7 @@ class MenuButton (Floor):
 
 class LevelInterfaceButton (Floor):
     def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
-                 img=OBJECT_GRAPHICS_WATER, img2=None,
+                 img=INTERFACE_BUTTONS, img2=None,
                  class_name_arg=None,
                  attribute_dict=None):
         super(self.__class__, self).__init__(position_x, position_y, block_size,
@@ -197,3 +198,16 @@ class LevelInterfaceButton (Floor):
         text_rect = text_.get_rect(center=(self.rect.x + self.rect.width / 2,
                                            self.rect.y + self.rect.height / 2))
         return text_, text_rect
+
+
+class TextBox:
+    def __init__(self, position_x, position_y, text_arg, text_font_arg, text_color_arg):
+        self.text = text_font_arg.render(text_arg, True, text_color_arg)
+        self.rect = self.text.get_rect(x=position_x, y=position_y)
+
+    def center(self, width):
+        """
+        Aligns the button to the center of a window.
+        """
+        self.rect.x = (width - self.rect.width)/2
+        return self

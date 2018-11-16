@@ -195,7 +195,7 @@ def level_interface(stats, objects_dictionarized, block_size):
                                                  position_y=ui_start,
                                                  block_size=block_size,
                                                  length_x=ui_height, length_y=ui_height,
-                                                 img=INTERFACE_LEVEL_SAVE))
+                                                 img=INTERFACE_LEVEL_SAVE + str(4 - i) + ".png"))
 
     objects_dictionarized["MenuButtons"].append(classes.objects.LevelInterfaceButton(position_x=0,
                                                 position_y=(ui_start - block_size),

@@ -5,7 +5,8 @@ import time
 
 import classes.lemmings
 from functions.level_utilities import level_load_save, level_save, level_create
-from global_variables import BLOCK_DEFAULT_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
+from global_variables import BLOCK_DEFAULT_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME,\
+    LEVEL_BACKGROUND_COLOR, LEVEL_TEXT_COLOR
 
 
 def level_run(block_size=None, level_slot=None, save_slot=None):
@@ -38,7 +39,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
 
     # Settings for the clock's appearance
     text_font = pygame.font.Font(None, block_size)
-    text_color = (255, 255, 255)
+    text_color = LEVEL_TEXT_COLOR
 
     method_to_use = None    # Variable used to change types of lemmings
     pause = False           # Flag which can be changed by pressing right button
@@ -86,7 +87,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
                 lem.move()
 
         # Filling background
-        screen.fill((0, 0, 0))
+        screen.fill(LEVEL_BACKGROUND_COLOR)
 
         # Drawing lemmings and all objects (interface included)
         for obj in lemmings + list(chain.from_iterable(objects_dictionarized.values())):

@@ -1,2 +1,0 @@
-['Lemming', (68, 65), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (62, 321), "{'image_name': 'graphics/lemming2.png', 'dirX': -1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]

@@ -1,7 +1,0 @@
-['LemmingAntiGravity', (99, 31), "{'image_name': 'graphics/exit.png', 'dirX': -1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (60, 225), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (64, 186), "{'image_name': 'graphics/lemming2.png', 'dirX': -1, 'dirY': 1, 'fall': 25, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (107, 129), "{'image_name': 'graphics/lemming2.png', 'dirX': -1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (192, 116), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 1, 'fall': 51, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (112, 385), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 1, 'speed': 1, 'unstuck': 0}"]
-['LemmingAntiGravity', (112, 383), "{'image_name': 'graphics/exit.png', 'dirX': 1, 'dirY': 0, 'fall': -2, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]

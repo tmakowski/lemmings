@@ -196,8 +196,8 @@ class Lemming:
             if (self.rect.colliderect(obj_exit.rect) and
                     self.rect.left == obj_exit.rect.left and
                     self.rect.right == obj_exit.rect.right and
-                    self.rect.top == obj_exit.rect.top and
-                    self.rect.bottom == obj_exit.rect.bottom):
+                    abs(self.rect.top - obj_exit.rect.top) < 2 and
+                    abs(self.rect.bottom - obj_exit.rect.bottom) < 2):
                 obj_exit.lemming_exit_number += 1
                 self.remove = 1
                 break
