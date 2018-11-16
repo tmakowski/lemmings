@@ -172,6 +172,7 @@ def level_interface(stats, objects_dictionarized, block_size):
     ui_height = stats["Ui_height"]
     ui_start = (0.5 * stats["Level_width"] - ui_height) * block_size
     stats["Ui_start"] = ui_start
+    # stats["Total_lemmings"] = len(objects_dictionarized["Entrance"]) * stats["Lemming_spawn_number"]
 
     objects_dictionarized["Buttons"] = [
         classes.objects.LevelInterfaceButton(position_x=0,

@@ -28,6 +28,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
     level_size = (int(block_size * level_width), int(0.5 * block_size * level_width))
     screen = pygame.display.set_mode(level_size)  # setting screen of the globally set size
 
+    frames_elapsed = 0
     method_to_use = None
     text_font = pygame.font.Font(None, block_size)
     text_color = (255, 255, 255)
@@ -57,6 +58,8 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
 
             # Collides lemmings with one another
             # lem.collision_lemmings(lemmings)
+
+            lem.boundary_check(level_size)
 
             # Removing lemmings that made it to the exit or got upgraded to different type
             if lem.remove == 1:
@@ -89,7 +92,9 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
         # Setting custom pause between frames
         dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
         stats["Timer"] -= dt
+        frames_elapsed += 1
         time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE/block_size))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exec(open("./main_menu.py").read())
@@ -100,9 +105,13 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
 
                 for button in objects_dictionarized["Buttons"]:
                     if button.rect.collidepoint(click_position):
-                        if button.class_name is not None and stats["Class_list"][button.class_name] > 0:
+                        if (button.class_name is not None and
+                                stats["Class_list"][button.class_name] > 0 and
+                                method_to_use is None):
                             method_to_use = getattr(classes.lemmings, button.class_name)
                             break
+                        elif button.class_name is not None:
+                            method_to_use = None
                         # jakiś efekt kliknięcia    def __str__(self):
 
                 if method_to_use is not None:
@@ -113,10 +122,16 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
                             stats["Class_list"][method_to_use.__name__] -= 1
                             method_to_use = None
                             level_save(1, lemmings, objects_dictionarized, stats)
-                            # charges -= 1
                             # wyłączyć efekt kliknięcia
                             break
                     continue
 
                 for lem in lemmings:
                     lem.on_click(click_position, objects_dictionarized, lemmings)
+
+        # Check for level end
+        if frames_elapsed > lemmings_spawn_rate:
+            if (max(stats["Timer"], 0) == 0 or
+                    (lemmings == [] and frames_elapsed > lemmings_spawn_rate * (lemmings_spawn_number+1))):
+                pass
+                # LEVEL END

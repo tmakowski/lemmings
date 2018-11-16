@@ -224,6 +224,14 @@ class Lemming:
                 break
         return self
 
+    def boundary_check(self, level_size):
+        if (self.rect.right > level_size[0] or
+                self.rect.left < 0):
+            self.dirX *= -1
+        if (self.rect.bottom > level_size[1] or
+                self.rect.top < 0):
+            self.dirY *= -1
+
 
 class LemmingStopper (Lemming):
     """
@@ -270,7 +278,7 @@ class LemmingAntiGravity (Lemming):
 
     def on_click(self, click_position, objects_dictionarized, lemmings):
         if self.rect.collidepoint(click_position):
-            lemmings.append(Lemming(self.rect.x, self.rect.y, self.rect.height, img_arg=LEMMING_GRAPHICS_DEFAULT,
+            lemmings.append(Lemming(self.rect.x, self.rect.y+2, self.rect.height, img_arg=LEMMING_GRAPHICS_DEFAULT,
                                     fall_arg=0, lemming_arg=self))
             self.remove = 1
 

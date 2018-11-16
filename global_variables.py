@@ -27,6 +27,10 @@ OBJECT_GRAPHICS_ENTRANCE = "graphics/entrance.png"
 OBJECT_GRAPHICS_EXIT = "graphics/exit.png"
 OBJECT_GRAPHICS_WATER = "graphics/water.png"
 
+CLASS_TO_GRAPHICS_DICT = {
+    "LemmingStopper": LEMMING_GRAPHICS_STOPPER,
+    "LemmingAntiGravity": LEMMING_GRAPHICS_ANTIGRAVITY}
+
 #
 SAVE_PATH = "./saves/save"
 SAVE_LEMMINGS = "lemmings.txt"
@@ -37,6 +41,6 @@ LEVEL_PATH = "./levels/level"
 LEVEL_LAYOUT = "level.txt"
 
 INTERFACE_BAR = "graphics/exit.png"
-CLASS_TO_GRAPHICS_DICT = {
-    "LemmingStopper": LEMMING_GRAPHICS_STOPPER,
-    "LemmingAntiGravity": LEMMING_GRAPHICS_ANTIGRAVITY}
+INTERFACE_BUTTONS = "graphics/water.png"
+INTERFACE_DEFAULT_SIZE = (480, 960)
+INTERFACE_TEXT_COLOR = (250, 100, 6)
