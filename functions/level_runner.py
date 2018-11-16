@@ -52,7 +52,7 @@ def level_run(sound_arg, block_size=None, level_slot=None, save_slot=None):
 
             # Swapping to a new frame with small delay (by default 200 frames per second)
             stats["Frames_elapsed"] += 1
-            time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE / block_size))
+            # time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE / block_size))
 
             # Spawning lemmings from each entrance
             for obj_entrance in objects_dictionarized["Entrance"]:
@@ -101,7 +101,7 @@ def level_run(sound_arg, block_size=None, level_slot=None, save_slot=None):
                 screen.blit(button.image2, button.rect2)
 
             # Display the remaining charges for given lemming type
-            screen.blit(*button.charges_to_text(stats, text_font, text_color))
+            screen.blit(*button.charges_to_text(stats, pygame.font.Font(None, 2 * block_size), (255, 0, 0)))
 
         # Drawing clock
         clock_text = text_font.render(interface["Time_left"]+str(round(stats["Timer"], 1)), True, text_color)

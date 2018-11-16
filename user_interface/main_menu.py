@@ -30,16 +30,16 @@ def menu_main(sound=True):
 
     # Creating the buttons
 
-    button_start = MenuButton(0, 200, block_size, length_x=5, length_y=2, img=INTERFACE_BUTTONS,
+    button_start = MenuButton(0, 200, block_size, length_x=7, length_y=2, img=INTERFACE_BUTTONS,
                               text_arg="Start game", text_color_arg=text_color, text_font_arg=button_font)
 
-    button_load = MenuButton(0, 300, block_size, length_x=5, length_y=2, img=INTERFACE_BUTTONS,
+    button_load = MenuButton(0, 300, block_size, length_x=7, length_y=2, img=INTERFACE_BUTTONS,
                              text_arg="Load game", text_color_arg=text_color, text_font_arg=button_font)
 
-    button_sound = MenuButton(0, 410, block_size, length_x=5, length_y=1, img=INTERFACE_BUTTONS,
+    button_sound = MenuButton(0, 410, block_size, length_x=7, length_y=1.5, img=INTERFACE_BUTTONS,
                               text_arg="Toggle sound", text_color_arg=text_color, text_font_arg=button_font)
 
-    button_exit = MenuButton(0, height - 80, block_size, length_x=3, length_y=1.5, img=INTERFACE_BUTTONS,
+    button_exit = MenuButton(0, height - 80, block_size, length_x=5, length_y=1.5, img=INTERFACE_BUTTONS,
                              text_arg="Exit", text_color_arg=text_color, text_font_arg=button_font)
 
     # Packing the buttons to a list and centering them

@@ -1,1 +1,0 @@
-['Lemming', (256, 345), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 1, 'fall': 56, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]

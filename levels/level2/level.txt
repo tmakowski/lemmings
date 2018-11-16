@@ -1,15 +1,23 @@
-WWWWWWWWWWWWWWWWWWWW
-WS     F           W
-W    E F           W
-WFFFFF F           W
-W      F           W
-WF  FFFF           W
-W  W               W
-W                  W
-WFFFFFF            W
-W                  W
-W S F  F           W
-W FFF    F         W
-WE     EF          W
-WFFFwwwwF          W
-WFFFFFFFFFFFFFFFFFFW
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+WS                                                   W
+W                                                    W
+WFFFFFFFFFFFFFFFFFFFFFFF    FFFFFFFFFFFFFFFFFFFFFFFFFW
+W                                                    W
+W                                                    W
+WFFFFFF  FFFFFFFFFFFFFFFFFFFFFFFFFFF  FFFFFFFFFFFFFFFW
+W             W                                      W
+W             W                                      W
+WFF  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFW
+W                                                    W
+W                                                    W
+WFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  FFFFFFFFFFFFFW
+W                                                    W
+W                                                    W
+WFFFFFF  FFFFFFFFFFF  FFFFFFFFFFFF  FFFFFFFFFFFFF  FFW
+W                                                    W
+W                                                    W
+W              FFFFFFFFFFFFFFFFFFFFFFFF              W
+W              W                       F             W
+W              W                        F            W
+W              W                         F          EW
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW

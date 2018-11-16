@@ -50,14 +50,14 @@ def end_screen(stats, sound):
 
     text_boxes = [
         TextBox(0, 80, status_text, pygame.font.SysFont('Verdana', 4 * block_size), text_color),
-        TextBox(0, 200, "(Level " + str(stats["Level_slot"]) + ")", button_font, text_color),
+        TextBox(0, 225, "(Level " + str(stats["Level_slot"]) + ")", button_font, text_color),
         TextBox(width // 4, 275,
                 "Lemmings spawned: " + str(lemmings_spawned), button_font, text_color),
         TextBox(width // 4, 325,
                 "Win threshold (lemmings number): " + str(lemmings_win_threshold), button_font, text_color),
         TextBox(width // 4, 475,
                 "Time elapsed: " + str(round(stats["Timer_zero"] - stats["Timer"], 1))
-                + " (seconds out of maximum " + str(stats["Timer_zero"]) + " )", button_font, text_color),
+                + " (seconds out of maximum " + str(stats["Timer_zero"]) + ")", button_font, text_color),
         # TextBox(width // 4, 550,
         #         "Lemmings which safely left: " + str(lemmings_exit)
         #         + " (" + str(round((lemmings_exit / lemmings_spawned) * 100, 0)) + "%)", button_font, text_color),
@@ -70,7 +70,7 @@ def end_screen(stats, sound):
     for i in range(2):
         text_boxes[i].center(width)
 
-    buttons.append(MenuButton(0, height - 80, block_size, length_x=5, length_y=2,
+    buttons.append(MenuButton(0, height - 80, block_size, length_x=7, length_y=2,
                               img=INTERFACE_BUTTONS,
                               text_arg=button_text,
                               text_color_arg=text_color,
@@ -78,7 +78,7 @@ def end_screen(stats, sound):
 
     buttons[-1].center(3 * (width // 2))
 
-    buttons.append(MenuButton(0, height - 80, block_size, length_x=5, length_y=2,
+    buttons.append(MenuButton(0, height - 80, block_size, length_x=7, length_y=2,
                               img=INTERFACE_BUTTONS,
                               text_arg="Save score",
                               text_color_arg=text_color,
@@ -87,7 +87,7 @@ def end_screen(stats, sound):
     buttons[-1].center(width)
 
     # Addition of a back button aligned to 1/4 of the screen
-    buttons.append(MenuButton(0, height-80, block_size, length_x=5, length_y=2,
+    buttons.append(MenuButton(0, height-80, block_size, length_x=7, length_y=2,
                               img=INTERFACE_BUTTONS,
                               text_arg="Main menu",
                               text_color_arg=text_color,
@@ -120,7 +120,7 @@ def end_screen(stats, sound):
                                                "score-level" + str(stats["Level_slot"]) + "-" +
                                                datetime.now().strftime('%Y%m%d_%H%M%S') + ".png"))
 
-                    buttons[1] = MenuButton(0, height - 80, block_size, length_x=5, length_y=2,
+                    buttons[1] = MenuButton(0, height - 80, block_size, length_x=7, length_y=2,
                                             img=INTERFACE_BUTTONS,
                                             text_arg="Score saved",
                                             text_color_arg=text_color,

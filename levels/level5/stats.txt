@@ -1,13 +1,13 @@
-{"Level_slot": 3,
+{"Level_slot": 5,
 "Block_size": 32,
 "Level_width": 54,
 "Ui_height": 3,
-"Lemmings_spawn_number": 10,
+"Lemmings_spawn_number": 5,
 "Lemmings_spawn_rate": 100,
 "Lemmings_win_threshold": 6,
 "Lemmings_spawned": 0,
 "Lemmings_exit": 0,
 "Frames_elapsed": 0,
-"Timer_zero": 180,
-"Timer": 180,
-"Class_list": {"LemmingStopper": 4}}
+"Timer_zero": 150,
+"Timer": 150,
+"Class_list": {"LemmingStopper": 4, "LemmingAntiGravity": 5}}

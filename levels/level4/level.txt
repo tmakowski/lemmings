@@ -1,23 +1,22 @@
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-W                           S          W             W
-W                                      W             W
-WFFFFFFFFFFFFFFFFFFFF  FFFFFFFFFFFFFFFFF             W
 W                                                    W
 W                                                    W
-WFFFFFF  FFFFFFFFFFFFFFFFFFFFFFFFFFF  FFFFFFFFFFFFFFFW
+W                                                    W
+W                                  FFFFFFFFFW        W
+W                                           W        W
+W                                           W        W
+W       FFFFFFFFFFFFFFFFFF             W    W        W
+W                                      W    W        W
+WS                                     WE   W        W
+W                      FFFFFFFFFFFFFFFFFFFFFF        W
+WFFFFFFFFF                                           W
 W                                                    W
 W                                                    W
-W        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFW
 W                                                    W
 W                                                    W
-WFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  FFFFFFFFFFFFFW
 W                                                    W
 W                                                    W
-WFFFFFF  FFFFFFFFFFF  FFFFFFFFFFFF  FFFFFFFFFFFFF    W
 W                                                    W
 W                                                    W
-W              FFFFFFFFFFFFFFFFFFFFFFFF              W
-W              W                                     W
-W              W                   FFFFFFFF          W
-W              W                                    EW
+WwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwW
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW

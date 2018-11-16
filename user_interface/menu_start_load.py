@@ -28,21 +28,23 @@ def submenu(mode, sound):
     # Creating the buttons
     buttons = []
     if mode == "start":
-        max_slot = 10   # number of levels
+        max_slot = 5   # number of levels
 
         # Creating and aligning a button for each level
         for i in range(max_slot):
-            buttons.append(MenuButton(0, 50 + (i % (max_slot//2)) * 80, block_size, length_x=5, length_y=2,
+            # buttons.append(MenuButton(0, 50 + (i % (max_slot//2)) * 80, block_size, length_x=5, length_y=2,
+            buttons.append(MenuButton(0, 50 + i * 80, block_size, length_x=5, length_y=2,
                                       img=INTERFACE_BUTTONS,
                                       text_arg="Level " + str(i + 1),
                                       text_color_arg=text_color,
                                       text_font_arg=button_font))
 
             # Splitting buttons into two rows
-            if i < max_slot // 2:
-                buttons[i].center(width // 2)
-            else:
-                buttons[i].center(3 * (width // 2))
+            # if i < max_slot // 2:
+            #     buttons[i].center(width // 2)
+            # else:
+            #     buttons[i].center(3 * (width // 2))
+            buttons[i].center(width)
 
     else:
         max_slot = 3        # number of save slots
