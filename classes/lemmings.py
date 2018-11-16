@@ -153,15 +153,8 @@ class Lemming:
 
         return self
 
-    # Not used
     def collision_wall(self, walls):
-        """
-        Checks if the lemming collided with any of the walls.
-        If it did then it's X-axis movement direction gets changed.
-        """
-        if self.rect.collidelist(walls) != -1:
-            self.dirX *= -1
-        return self
+        pass
 
     def collision_floor(self, floors):
         """

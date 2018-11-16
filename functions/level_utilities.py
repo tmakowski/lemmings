@@ -174,15 +174,8 @@ def level_interface(stats, objects_dictionarized, block_size):
     ui_height = stats["Ui_height"]
     level_width = stats["Level_width"]
     ui_start = (0.5 * level_width - ui_height) * block_size
-    # stats["Ui_start"] = ui_start
-    # stats["Total_lemmings"] = len(objects_dictionarized["Entrance"]) * stats["Lemming_spawn_number"]
+    stats["Level_size"] = (int(block_size * level_width), int(0.5 * block_size * level_width))
 
-    objects_dictionarized["Buttons"] = [
-        classes.objects.LevelInterfaceButton(position_x=0,
-                                             position_y=(ui_start - block_size),
-                                             block_size=block_size,
-                                             length_x=level_width, length_y=1,
-                                             img=INTERFACE_LEVEL_BAR)]
     objects_dictionarized["MenuButtons"] = [
         classes.objects.LevelInterfaceButton(position_x=(level_width - ui_height) * block_size,
                                              position_y=ui_start,
@@ -204,7 +197,14 @@ def level_interface(stats, objects_dictionarized, block_size):
                                                  length_x=ui_height, length_y=ui_height,
                                                  img=INTERFACE_LEVEL_SAVE))
 
+    objects_dictionarized["MenuButtons"].append(classes.objects.LevelInterfaceButton(position_x=0,
+                                                position_y=(ui_start - block_size),
+                                                 block_size=block_size,
+                                                 length_x=level_width, length_y=1,
+                                                 img=INTERFACE_LEVEL_BAR))
+
     offset_x = 0
+    objects_dictionarized["Buttons"] = []
     for (class_name, charges) in stats["Class_list"].items():
         objects_dictionarized["Buttons"].append(
             classes.objects.LevelInterfaceButton(position_x=offset_x * (ui_height + 0.5) * block_size,

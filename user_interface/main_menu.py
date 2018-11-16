@@ -43,7 +43,7 @@ def menu_main():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-            # For each click ...
+            # For each click...
             if event.type == pygame.MOUSEBUTTONUP:
 
                 # Reading position of the click
