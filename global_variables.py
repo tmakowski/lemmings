@@ -40,8 +40,11 @@ SAVE_STATS = "stats.txt"
 LEVEL_PATH = "./levels/level"
 LEVEL_LAYOUT = "level.txt"
 
-INTERFACE_BAR = "graphics/exit.png"
+INTERFACE_LEVEL_BAR = "graphics/exit.png"
+INTERFACE_LEVEL_EXIT = "graphics/level_exit.png"
+INTERFACE_LEVEL_SAVE = "graphics/level_save.png"
+INTERFACE_LEVEL_PAUSE = "graphics/level_pause.png"
 INTERFACE_BUTTONS = "graphics/water.png"
-INTERFACE_DEFAULT_SIZE = (480, 960)
+INTERFACE_DEFAULT_SIZE = (480, 600)
 INTERFACE_TEXT_COLOR = (250, 100, 6)
 INTERFACE_BACKGROUND_COLOR = (253, 153, 153)

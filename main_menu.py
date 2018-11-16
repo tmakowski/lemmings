@@ -29,7 +29,7 @@ button_start = MenuButton(0, 200, block_size, length_x=5, length_y=2, img=INTERF
 button_load = MenuButton(0, 350, block_size, length_x=5, length_y=2, img=INTERFACE_BUTTONS,
                          text_arg="Load game", text_color_arg=text_color, text_font_arg=button_font)
 
-button_exit = MenuButton(0, 500, block_size, length_x=5, length_y=2, img=INTERFACE_BUTTONS,
+button_exit = MenuButton(0, 500, block_size, length_x=3, length_y=1.5, img=INTERFACE_BUTTONS,
                          text_arg="Exit", text_color_arg=text_color, text_font_arg=button_font)
 
 

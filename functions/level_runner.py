@@ -32,42 +32,50 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
     method_to_use = None
     text_font = pygame.font.Font(None, block_size)
     text_color = (255, 255, 255)
+    pause = False
 
     while True:
+        if not pause:
+            # System stuff
+            # Setting custom pause between frames
+            dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
+            stats["Timer"] -= dt
+            frames_elapsed += 1
+            time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE / block_size))
 
-    # Spawning lemmings
-        for obj_entrance in objects_dictionarized["Entrance"]:
-            obj_entrance.spawn(lemmings, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
+        # Spawning lemmings
+            for obj_entrance in objects_dictionarized["Entrance"]:
+                obj_entrance.spawn(lemmings, spawn_rate=lemmings_spawn_rate, spawn_number=lemmings_spawn_number)
 
-    # Performing actions for each lemming
-        for lem in lemmings:
+        # Performing actions for each lemming
+            for lem in lemmings:
 
-            # Check if the lemming is dead
-            if lem.dead > 0:
+                # Check if the lemming is dead
+                if lem.dead > 0:
 
-                # Deleting the lemming after it's dead version has been displayed long enough
-                if lem.dead > LEVEL_DEATH_FRAMES:
+                    # Deleting the lemming after it's dead version has been displayed long enough
+                    if lem.dead > LEVEL_DEATH_FRAMES:
+                        lemmings.remove(lem)
+
+                    # Increasing the dead-lemming frame counter
+                    lem.dead += 1
+                    continue
+
+                # Colliding the lemming with each type of objects
+                lem.collision_objects(objects_dictionarized)
+
+                # Collides lemmings with one another
+                # lem.collision_lemmings(lemmings)
+
+                lem.boundary_check(level_size)
+
+                # Removing lemmings that made it to the exit or got upgraded to different type
+                if lem.remove == 1:
                     lemmings.remove(lem)
+                    continue
 
-                # Increasing the dead-lemming frame counter
-                lem.dead += 1
-                continue
-
-            # Colliding the lemming with each type of objects
-            lem.collision_objects(objects_dictionarized)
-
-            # Collides lemmings with one another
-            # lem.collision_lemmings(lemmings)
-
-            lem.boundary_check(level_size)
-
-            # Removing lemmings that made it to the exit or got upgraded to different type
-            if lem.remove == 1:
-                lemmings.remove(lem)
-                continue
-
-            # Moving the lemming
-            lem.move()
+                # Moving the lemming
+                lem.move()
 
     # Drawing the frame
         # Filling background
@@ -88,19 +96,11 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
         # Changing display to show drawn objects
         pygame.display.flip()
 
-    # System stuff
-        # Setting custom pause between frames
-        dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
-        stats["Timer"] -= dt
-        frames_elapsed += 1
-        time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE/block_size))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exec(open("./main_menu.py").read())
-                sys.exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONUP:
                 click_position = pygame.mouse.get_pos()
 
                 for button in objects_dictionarized["Buttons"]:
@@ -113,6 +113,16 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
                         elif button.class_name is not None:
                             method_to_use = None
                         # jakiś efekt kliknięcia    def __str__(self):
+
+                if objects_dictionarized["MenuButtons"][0].rect.collidepoint(click_position):
+                    exec(open("./main_menu.py").read())
+
+                if objects_dictionarized["MenuButtons"][1].rect.collidepoint(click_position):
+                    pause = not pause
+
+                for i in [2, 3, 4]:
+                    if objects_dictionarized["MenuButtons"][i].rect.collidepoint(click_position):
+                        level_save(5-i, lemmings, objects_dictionarized, stats) # save buttons are reversely ordered
 
                 if method_to_use is not None:
                     for lem in lemmings:

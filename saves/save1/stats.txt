@@ -1,1 +1,1 @@
-{'Block_size': 32, 'Level_width': 54, 'Ui_height': 3, 'Lemmings_spawn_number': 5, 'Lemmings_spawn_rate': 100, 'Timer': 111.82999999999971, 'Class_list': ['LemmingStopper'], 'Ui_start': 768.0}
+{'Block_size': 32, 'Level_width': 54, 'Ui_height': 3, 'Lemmings_spawn_number': 5, 'Lemmings_spawn_rate': 100, 'Lemmings_win_threshold': 5, 'Timer_zero': 120, 'Timer': 93.15899999999945, 'Class_list': {'LemmingStopper': 1, 'LemmingAntiGravity': 0}}

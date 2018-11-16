@@ -4,8 +4,8 @@ The purpose of this module is translating text visualization of the map to the p
 import pygame
 import classes.objects
 from classes.lemmings import Lemming
-from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, LEVEL_PATH, LEVEL_LAYOUT,\
-    INTERFACE_BAR, CLASS_TO_GRAPHICS_DICT
+from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, LEVEL_PATH, LEVEL_LAYOUT, \
+    CLASS_TO_GRAPHICS_DICT, INTERFACE_LEVEL_BAR, INTERFACE_LEVEL_EXIT, INTERFACE_LEVEL_SAVE, INTERFACE_LEVEL_PAUSE
 
 code_to_class_dict = dict([
     (code, getattr(classes.objects, class_name))
@@ -170,24 +170,45 @@ def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
 def level_interface(stats, objects_dictionarized, block_size):
     # block_size = stats["Block_size"] if new_block_size is None else new_block_size
     ui_height = stats["Ui_height"]
-    ui_start = (0.5 * stats["Level_width"] - ui_height) * block_size
-    stats["Ui_start"] = ui_start
+    level_width = stats["Level_width"]
+    ui_start = (0.5 * level_width - ui_height) * block_size
+    # stats["Ui_start"] = ui_start
     # stats["Total_lemmings"] = len(objects_dictionarized["Entrance"]) * stats["Lemming_spawn_number"]
 
     objects_dictionarized["Buttons"] = [
         classes.objects.LevelInterfaceButton(position_x=0,
                                              position_y=(ui_start - block_size),
                                              block_size=block_size,
-                                             length_x=stats["Level_width"], length_y=1,
-                                             img=INTERFACE_BAR)]
+                                             length_x=level_width, length_y=1,
+                                             img=INTERFACE_LEVEL_BAR)]
+    objects_dictionarized["MenuButtons"] = [
+        classes.objects.LevelInterfaceButton(position_x=(level_width - ui_height) * block_size,
+                                             position_y=ui_start,
+                                             block_size=block_size,
+                                             length_x=ui_height, length_y=ui_height,
+                                             img=INTERFACE_LEVEL_EXIT),
+        classes.objects.LevelInterfaceButton(position_x=(level_width - 6 * ui_height) * block_size,
+                                             position_y=ui_start,
+                                             block_size=block_size,
+                                             length_x=ui_height, length_y=ui_height,
+                                             img=INTERFACE_LEVEL_PAUSE)
+    ]
+
+    for i in [1, 2, 3]:
+        objects_dictionarized["MenuButtons"].append(
+            classes.objects.LevelInterfaceButton(position_x=(level_width - (1 + i * 1.25) * ui_height) * block_size,
+                                                 position_y=ui_start,
+                                                 block_size=block_size,
+                                                 length_x=ui_height, length_y=ui_height,
+                                                 img=INTERFACE_LEVEL_SAVE))
 
     offset_x = 0
     for (class_name, charges) in stats["Class_list"].items():
         objects_dictionarized["Buttons"].append(
-            classes.objects.LevelInterfaceButton(position_x=offset_x * ui_height * (block_size + 1),
+            classes.objects.LevelInterfaceButton(position_x=offset_x * (ui_height + 0.5) * block_size,
                                                  position_y=ui_start, block_size=block_size,
                                                  length_x=ui_height, length_y=ui_height,
-                                                 class_name_arg=class_name, charges_arg=charges,
+                                                 class_name_arg=class_name,
                                                  img2=CLASS_TO_GRAPHICS_DICT[class_name]))
         offset_x += 1
 

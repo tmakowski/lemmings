@@ -139,7 +139,7 @@ class Lemming:
         for key in dict_objects.keys():
 
             # Walls and floors are handled below
-            if key in ["Wall", "Floor", "Stoppers"]:
+            if key in ["Wall", "Floor", "Stoppers", "Buttons", "MenuButtons"]:
                 continue
 
             method = getattr(self, "collision_" + key.lower())
@@ -159,9 +159,6 @@ class Lemming:
         if self.rect.collidelist(walls) != -1:
             self.dirX *= -1
         return self
-
-    def collision_buttons(self, buttons):
-        pass
 
     def collision_floor(self, floors):
         """

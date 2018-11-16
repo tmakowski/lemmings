@@ -1,4 +1,2 @@
-['Lemming', (100, 65), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (32, 323), "{'image_name': 'graphics/lemming2.png', 'dirX': -1, 'dirY': 1, 'fall': 2, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (32, 33), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 1, 'fall': 1, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
-['Lemming', (64, 321), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 1, 'fall': 1, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
+['Lemming', (68, 65), "{'image_name': 'graphics/lemming2.png', 'dirX': 1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
+['Lemming', (62, 321), "{'image_name': 'graphics/lemming2.png', 'dirX': -1, 'dirY': 0, 'fall': 0, 'dead': 0, 'remove': 0, 'speed': 1, 'unstuck': 0}"]
