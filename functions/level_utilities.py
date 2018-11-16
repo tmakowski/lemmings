@@ -2,9 +2,11 @@
 The purpose of this module is translating text visualization of the map to the proper objects.
 """
 import pygame
+import os
 import classes.objects
+
 from classes.lemmings import Lemming
-from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, LEVEL_PATH, LEVEL_LAYOUT, \
+from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, LEVEL_PATH, LEVEL_LAYOUT,\
     CLASS_TO_GRAPHICS_DICT, INTERFACE_LEVEL_BAR, INTERFACE_LEVEL_EXIT, INTERFACE_LEVEL_SAVE, INTERFACE_LEVEL_PAUSE
 
 code_to_class_dict = dict([
@@ -153,6 +155,9 @@ def level_load_save(save_slot, new_block_size=None, path=None):
 def level_save(save_slot, lemmings, objects_dictionarized, stats, screen, path=None):
     if path is None:
         path = SAVE_PATH + str(save_slot) + "/"
+
+    if not os.path.exists(path):
+        os.makedirs(path)
 
     with open(path + SAVE_OBJECTS, "w") as f:
         for obj_type in [value for (key, value) in objects_dictionarized.items() if key != "Stoppers"]:

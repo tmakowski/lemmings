@@ -8,7 +8,7 @@ from global_variables import BLOCK_DEFAULT_SIZE, INTERFACE_BUTTONS, INTERFACE_DE
     INTERFACE_TEXT_COLOR, INTERFACE_BACKGROUND_COLOR, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS
 
 
-def submenu(mode):
+def submenu(mode, sound):
     from user_interface.main_menu import menu_main
 
     # Setting top-left corner of a window
@@ -105,14 +105,14 @@ def submenu(mode):
 
                     # Collision (click) check
                     if buttons[i].rect.collidepoint(click_position):
-
+                        pygame.mixer.music.fadeout(1000)
                         if mode == "start":
-                            level_run(level_slot=i+1)
+                            level_run(level_slot=i+1, sound_arg=sound)
 
                         else:
                             # Checking if save slot is non-empty
                             if i in save_slots:
-                                level_run(save_slot=i+1)
+                                level_run(save_slot=i+1, sound_arg=sound)
 
                 # Separate action for back button which returns to main menu
                 if buttons[-1].rect.collidepoint(click_position):

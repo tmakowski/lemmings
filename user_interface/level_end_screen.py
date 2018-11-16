@@ -5,11 +5,11 @@ from datetime import datetime
 
 from classes.objects import MenuButton, TextBox
 from functions.level_runner import level_run
-from global_variables import BLOCK_DEFAULT_SIZE, INTERFACE_BUTTONS, INTERFACE_DEFAULT_SIZE,\
-    INTERFACE_TEXT_COLOR, INTERFACE_BACKGROUND_COLOR, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, SOUND_VICTORY
+from global_variables import BLOCK_DEFAULT_SIZE, INTERFACE_BUTTONS, INTERFACE_TEXT_COLOR, INTERFACE_BACKGROUND_COLOR,\
+    SOUND_VICTORY, SOUND_DEFEAT
 
 
-def end_screen(stats):
+def end_screen(stats, sound):
     from user_interface.main_menu import menu_main
 
     # Setting top-left corner of a window
@@ -31,6 +31,7 @@ def end_screen(stats):
     lemmings_spawned = stats["Lemmings_spawned"]
     lemmings_exit = stats["Lemmings_exit"]
     victory = True if lemmings_exit >= lemmings_win_threshold else False
+    score_saved = False
 
     # Creating the buttons
     buttons = []
@@ -38,10 +39,14 @@ def end_screen(stats):
         status_text = "Victory!"
         button_text = "Next level"
         pygame.mixer.music.load(SOUND_VICTORY)
-        pygame.mixer.music.play()
+
     else:
         status_text = "Defeat!"
         button_text = "Retry"
+        pygame.mixer.music.load(SOUND_DEFEAT)
+
+    if sound:
+        pygame.mixer.music.play()
 
     text_boxes = [
         TextBox(0, 80, status_text, pygame.font.SysFont('Verdana', 4 * block_size), text_color),
@@ -52,14 +57,15 @@ def end_screen(stats):
                 "Win threshold (lemmings number): " + str(lemmings_win_threshold), button_font, text_color),
         TextBox(width // 4, 475,
                 "Time elapsed: " + str(round(stats["Timer_zero"] - stats["Timer"], 1))
-                + " (out of" + str(stats["Timer_zero"]) + ")", button_font, text_color),
+                + " (seconds out of maximum " + str(stats["Timer_zero"]) + " )", button_font, text_color),
         # TextBox(width // 4, 550,
         #         "Lemmings which safely left: " + str(lemmings_exit)
         #         + " (" + str(round((lemmings_exit / lemmings_spawned) * 100, 0)) + "%)", button_font, text_color),
         TextBox(width // 4, 525,
                 "Lemmings which safely left: " + str(lemmings_exit), button_font, text_color),
         TextBox(width // 4, 575,
-                "Goal met in: " + str(round((lemmings_exit / lemmings_win_threshold) * 100, 0)) + "%", button_font, text_color)
+                "Goal met in: " + str(round((lemmings_exit / lemmings_win_threshold) * 100, 0)) + "%",
+                button_font, text_color)
     ]
     for i in range(2):
         text_boxes[i].center(width)
@@ -102,21 +108,29 @@ def end_screen(stats):
 
                 # Either starting the same level or next one
                 if buttons[0].rect.collidepoint(click_position):
-
+                    pygame.mixer.music.fadeout(500)
                     if victory:
-                        level_run(level_slot=stats["Level_slot"]+1)
+                        level_run(level_slot=stats["Level_slot"]+1, sound_arg=sound)
 
                     else:
-                        level_run(level_slot=stats["Level_slot"])
+                        level_run(level_slot=stats["Level_slot"], sound_arg=sound)
 
-                if buttons[1].rect.collidepoint(click_position):
-
+                if buttons[1].rect.collidepoint(click_position) and not score_saved:
                     pygame.image.save(screen, ("./scores/" +
                                                "score-level" + str(stats["Level_slot"]) + "-" +
                                                datetime.now().strftime('%Y%m%d_%H%M%S') + ".png"))
 
+                    buttons[1] = MenuButton(0, height - 80, block_size, length_x=5, length_y=2,
+                                            img=INTERFACE_BUTTONS,
+                                            text_arg="Score saved",
+                                            text_color_arg=text_color,
+                                            text_font_arg=button_font)
+                    buttons[1].center(width)
+                    score_saved = True
+
                 # Separate action for back button which returns to main menu
                 if buttons[-1].rect.collidepoint(click_position):
+                    pygame.mixer.music.stop()
                     menu_main()
 
         # Filling background

@@ -1,6 +1,6 @@
 WWWWWWWWWWWWWWWWWWWW
 WS     F           W
-W      F           W
+W    E F           W
 WFFFFF F           W
 W      F           W
 WF  FFFF           W
@@ -10,6 +10,6 @@ WFFFFFF            W
 W                  W
 W S F  F           W
 W FFF    F         W
-W      EF  S       W
+WE     EF          W
 WFFFwwwwF          W
 WFFFFFFFFFFFFFFFFFFW

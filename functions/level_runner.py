@@ -9,7 +9,7 @@ from global_variables import BLOCK_DEFAULT_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME
     LEVEL_BACKGROUND_COLOR, LEVEL_TEXT_COLOR
 
 
-def level_run(block_size=None, level_slot=None, save_slot=None):
+def level_run(sound_arg, block_size=None, level_slot=None, save_slot=None):
     from user_interface.main_menu import menu_main
     from user_interface.level_end_screen import end_screen
 
@@ -122,7 +122,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
 
                 # Exit to main menu button
                 if objects_dictionarized["MenuButtons"][0].rect.collidepoint(click_position):
-                    menu_main()
+                    menu_main(sound_arg)
 
                 # Pause button
                 if objects_dictionarized["MenuButtons"][1].rect.collidepoint(click_position):
@@ -187,4 +187,4 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
                 for obj_exit in objects_dictionarized["Exit"]:
                     stats["Lemmings_exit"] += obj_exit.lemming_exit_number
 
-                end_screen(stats)
+                end_screen(stats, sound_arg)
