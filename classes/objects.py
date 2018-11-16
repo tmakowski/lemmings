@@ -81,12 +81,12 @@ class Entrance (Floor):
         """
         super(self.__class__, self).__init__(position_x, position_y, block_size,
                                              length_x, length_y, img, attribute_dict)
+        if attribute_dict is None:
+            # Used to count frames between next lemmings spawns
+            self.spawn_timer = 0
 
-        # Used to count frames between next lemmings spawns
-        self.spawn_timer = 0
-
-        # Counts how many lemmings were spawned
-        self.spawn_counter = 0
+            # Counts how many lemmings were spawned
+            self.spawn_counter = 0
 
     def __dir__(self):
         """
@@ -117,9 +117,9 @@ class Exit (Floor):
         """
         super(self.__class__, self).__init__(position_x, position_y, block_size,
                                              length_x, length_y, img, attribute_dict)
-
-        # Counts how many lemmings left through that exit
-        self.lemming_exit_number = 0
+        if attribute_dict is None:
+            # Counts how many lemmings left through that exit
+            self.lemming_exit_number = 0
 
     def __dir__(self):
         """

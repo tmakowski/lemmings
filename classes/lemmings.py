@@ -252,6 +252,7 @@ class LemmingStopper (Lemming):
                                     speed_arg=1, lemming_arg=self))
             objects_dictionarized["Stoppers"].remove(self)
             self.remove = 1
+        return lemmings, objects_dictionarized
 
     def collision_lemmings(self, lemmings):
         pass

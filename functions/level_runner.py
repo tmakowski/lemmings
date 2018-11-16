@@ -100,7 +100,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
             if event.type == pygame.QUIT:
                 exec(open("./main_menu.py").read())
 
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 click_position = pygame.mouse.get_pos()
 
                 for button in objects_dictionarized["Buttons"]:
