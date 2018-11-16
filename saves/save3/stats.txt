@@ -1,0 +1,1 @@
+{'Block_size': 32, 'Level_width': 54, 'Ui_height': 3, 'Lemmings_spawn_number': 5, 'Lemmings_spawn_rate': 100, 'Class_list': ['LemmingStopper']}

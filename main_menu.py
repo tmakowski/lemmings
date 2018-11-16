@@ -27,7 +27,7 @@ button_exit = MenuButton(0, 500, block_size, length_x=5, length_y=2, img="graphi
 
 # Packing the buttons to a list and craeting dictionary for their uses
 # buttons = [button_start, button_exit]
-button_to_action_dict = {button_start: level_run, button_load: [level_run, 5], button_exit: sys.exit}
+button_to_action_dict = {button_start: level_run, button_load: [level_run, 3], button_exit: sys.exit}
 for button in button_to_action_dict.keys():
     button.center(width)
 
@@ -51,11 +51,9 @@ while True:
                 if button.rect.collidepoint(click_pos):
 
                     if button == button_start:
-                        button_to_action_dict[button](lemmings_spawn_number, lemmings_spawn_rate, block_size,
-                                                      level_file="./level.txt")
+                        button_to_action_dict[button](level_slot=1)
                     elif button == button_load:
-                        button_to_action_dict[button][0](lemmings_spawn_number, lemmings_spawn_rate,
-                                                         save_slot=button_to_action_dict[button][1])
+                        button_to_action_dict[button][0](save_slot=button_to_action_dict[button][1])
                     else:
                         button_to_action_dict[button]()
 

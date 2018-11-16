@@ -3,7 +3,8 @@ The purpose of this module is translating text visualization of the map to the p
 """
 import classes.objects
 from classes.lemmings import Lemming
-from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS
+from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, LEVEL_PATH, LEVEL_LAYOUT,\
+    INTERFACE_BAR, CLASS_TO_GRAPHICS_DICT
 
 code_to_class_dict = dict([
     (code, getattr(classes.objects, class_name))
@@ -47,6 +48,7 @@ def sort_objects_to_dict(objects):
     objects_dictionarized = {}
     for class_name in OBJECT_DICT.values():
         objects_dictionarized[class_name] = [obj for obj in objects if obj.__class__.__name__ == class_name]
+    objects_dictionarized["Stoppers"] = []
     return objects_dictionarized
 
 
@@ -133,6 +135,8 @@ def level_load_save(save_slot, path=None):
     objects_dictionarized = level_load_objects(SAVE_OBJECTS, block_size, path)
     lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, objects_dictionarized, path)
 
+    objects_dictionarized = level_interface(stats, objects_dictionarized)
+
     return lemmings, objects_dictionarized, stats
 
 
@@ -151,3 +155,39 @@ def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
 
     with open(path + SAVE_STATS, "w") as f:
         print(stats, file=f)
+
+
+def level_interface(stats, objects_dictionarized):
+    block_size = stats["Block_size"]
+    ui_height = stats["Ui_height"]
+    ui_start = (0.5 * stats["Level_width"] - ui_height) * block_size
+
+    objects_dictionarized["Buttons"] = [
+        classes.objects.LevelInterfaceButton(position_x=0, position_y=(ui_start - block_size),
+                                             block_size=block_size, img=INTERFACE_BAR,
+                                             length_x=stats["Level_width"], length_y=1)]
+
+    offset_x = 0
+    for class_name in stats["Class_list"]:
+        objects_dictionarized["Buttons"].append(
+            classes.objects.LevelInterfaceButton(position_x=offset_x * ui_height * (block_size + 1),
+                                                 position_y=ui_start, block_size=block_size,
+                                                 length_x=ui_height, length_y=ui_height, class_name_arg=class_name,
+                                                 img2=CLASS_TO_GRAPHICS_DICT[class_name]))
+        offset_x += 1
+    return objects_dictionarized
+
+
+def level_create(level_slot, path=None):
+    if path is None:
+        path = LEVEL_PATH + str(level_slot) + "/"
+
+    level = level_import_layout(path + LEVEL_LAYOUT)
+
+    stats = level_load_stats(SAVE_STATS, path)
+    objects_dictionarized = level_generate(level, stats["Block_size"])
+    lemmings = []
+
+    objects_dictionarized = level_interface(stats, objects_dictionarized)
+
+    return lemmings, objects_dictionarized, stats

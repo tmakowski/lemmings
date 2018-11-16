@@ -4,37 +4,38 @@ import sys
 import time
 
 import classes.lemmings
-from functions.level_utilities import level_generate, level_import_layout, level_load_save, level_save
+from functions.level_utilities import level_generate, level_import_layout, level_load_save, level_save, level_create
 from global_variables import LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 from classes.objects import LevelInterface
 # from classes.lemmings import *
 
 
-def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size=None, level_file=None, save_slot=None):
+def level_run(level_slot=None, save_slot=None):
     # Level startup
     pygame.init()
 
     if save_slot is None:
-        level = level_import_layout(level_file)                    # importing level layout
-        objects_dictionarized = level_generate(level, block_size)  # generating objects based on the level visualization
-        objects_dictionarized["Stoppers"] = []
-        lemmings = []  # initializing a list for lemmings if those weren't provided
-        stats = {"Block_size": block_size}
+        lemmings, objects_dictionarized, stats = level_create(level_slot)
+        # level = level_import_layout(level_file)                    # importing level layout
+        # objects_dictionarized = level_generate(level, block_size)# generating objects based on the level visualization
+        # objects_dictionarized["Stoppers"] = []
+        # lemmings = []  # initializing a list for lemmings if those weren't provided
+        # stats = {"Block_size": block_size}
     else:
         lemmings, objects_dictionarized, stats = level_load_save(save_slot)
-        lemmings_spawn_number = 0 # should be read
-        block_size = stats["Block_size"]
 
-    level_width = 54
+    block_size = stats["Block_size"]
+    lemmings_spawn_number = stats["Lemmings_spawn_number"]
+    lemmings_spawn_rate = stats["Lemmings_spawn_rate"]
+
+    level_width = stats["Level_width"]
     level_size = (int(block_size * level_width), int(0.5 * block_size * level_width))
     screen = pygame.display.set_mode(level_size)  # setting screen of the globally set size
     #
     interface = LevelInterface(block_size=block_size, level_size=level_size, class_list=["LemmingStopper"]).ui
-    objects_dictionarized["Buttons"] = interface["Buttons"]
+    # objects_dictionarized["Buttons"] = interface["Buttons"]
 
     method_to_use = None
-    dev_timer = 0
-
     text_font = pygame.font.Font(None, block_size)
     text_color = (255, 255, 255)
 
@@ -46,7 +47,6 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size=None, level
 
             if event.type == pygame.MOUSEBUTTONUP:
                 click_position = pygame.mouse.get_pos()
-                clicked = [s for s in lemmings if s.rect.collidepoint(click_position)]
 
                 for button in objects_dictionarized["Buttons"]:
                     if button.rect.collidepoint(click_position):
@@ -60,8 +60,7 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size=None, level
                         if lem.rect.collidepoint(click_position):
                             lemmings.append(method_to_use(lemming_arg=lem, objects_dictionarized=objects_dictionarized))
                             method_to_use = None
-                            level_save(5, lemmings, objects_dictionarized, stats)
-                            print(interface)
+                            level_save(3, lemmings, objects_dictionarized, stats)
                             # charges -= 1
                             # wyłączyć efekt kliknięcia
                             break
@@ -121,11 +120,3 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size=None, level
         dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
         interface["Timer"] -= dt
         time.sleep(LEVEL_FRAME_TIME)
-
-
-        # dev_timer += 1
-        # if lemmings == [] and dev_timer > lemmings_spawn_rate:
-        #     for obj_exit in objects_dictionarized["Exit"]:
-        #         print("Uwaga, uwaga, tyle lemingów wyszło:", obj_exit.lemming_exit_number)
-        #     exec(open("./main_menu.py").read())
-        #     sys.exit()

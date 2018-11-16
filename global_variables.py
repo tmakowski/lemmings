@@ -32,6 +32,9 @@ SAVE_LEMMINGS = "lemmings.txt"
 SAVE_OBJECTS = "objects.txt"
 SAVE_STATS = "stats.txt"
 
+LEVEL_PATH = "./levels/level"
+LEVEL_LAYOUT = "level.txt"
+
 INTERFACE_BAR = "graphics/exit.png"
 CLASS_TO_GRAPHICS_DICT = {
     "LemmingStopper": LEMMING_GRAPHICS_STOPPER}
