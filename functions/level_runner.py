@@ -122,7 +122,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
 
                 for i in [2, 3, 4]:
                     if objects_dictionarized["MenuButtons"][i].rect.collidepoint(click_position):
-                        level_save(5-i, lemmings, objects_dictionarized, stats) # save buttons are reversely ordered
+                        level_save(5-i, lemmings, objects_dictionarized, stats, screen) # save buttons are reversely ordered
 
                 if method_to_use is not None:
                     for lem in lemmings:
@@ -131,7 +131,6 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
 
                             stats["Class_list"][method_to_use.__name__] -= 1
                             method_to_use = None
-                            level_save(1, lemmings, objects_dictionarized, stats)
                             # wyłączyć efekt kliknięcia
                             break
                     continue

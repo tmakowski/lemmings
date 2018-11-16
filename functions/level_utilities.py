@@ -150,7 +150,7 @@ def level_load_save(save_slot, new_block_size=None, path=None):
     return lemmings, objects_dictionarized, stats, interface
 
 
-def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
+def level_save(save_slot, lemmings, objects_dictionarized, stats, screen, path=None):
     if path is None:
         path = SAVE_PATH + str(save_slot) + "/"
 
@@ -165,6 +165,8 @@ def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
 
     with open(path + SAVE_STATS, "w") as f:
         print(stats, file=f)
+
+    pygame.image.save(screen, path + "frame.png")
 
 
 def level_interface(stats, objects_dictionarized, block_size):
