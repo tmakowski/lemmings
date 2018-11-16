@@ -4,4 +4,4 @@
 "Lemmings_spawn_number": 5,
 "Lemmings_spawn_rate": 100,
 "Timer": 120,
-"Class_list": ["LemmingStopper"]}
+"Class_list": {"LemmingStopper": 1}}

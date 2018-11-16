@@ -33,30 +33,6 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
     text_color = (255, 255, 255)
 
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exec(open("./main_menu.py").read())
-                sys.exit()
-
-            if event.type == pygame.MOUSEBUTTONUP:
-                click_position = pygame.mouse.get_pos()
-
-                for button in objects_dictionarized["Buttons"]:
-                    if button.rect.collidepoint(click_position):
-                        if button.class_name is not None:
-                            method_to_use = getattr(classes.lemmings, button.class_name)
-                            break
-                        # jakiś efekt kliknięcia    def __str__(self):
-
-                if method_to_use is not None:
-                    for lem in lemmings:
-                        if lem.rect.collidepoint(click_position):
-                            lemmings.append(method_to_use(lemming_arg=lem, objects_dictionarized=objects_dictionarized))
-                            method_to_use = None
-                            level_save(1, lemmings, objects_dictionarized, stats)
-                            # charges -= 1
-                            # wyłączyć efekt kliknięcia
-                            break
 
     # Spawning lemmings
         for obj_entrance in objects_dictionarized["Entrance"]:
@@ -101,6 +77,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
         for button in objects_dictionarized["Buttons"]:
             if button.image_name2 is not None:
                 screen.blit(button.image2, button.rect2)
+            screen.blit(*button.charges_to_text(stats, text_font, text_color))
 
         clock_text = text_font.render(interface["Time_left"]+str(round(stats["Timer"], 1)), True, text_color)
         screen.blit(clock_text, interface["Clock_position"])
@@ -113,3 +90,29 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
         dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
         stats["Timer"] -= dt
         time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE/block_size))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exec(open("./main_menu.py").read())
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click_position = pygame.mouse.get_pos()
+
+                for button in objects_dictionarized["Buttons"]:
+                    if button.rect.collidepoint(click_position):
+                        if button.class_name is not None and stats["Class_list"][button.class_name] > 0:
+                            method_to_use = getattr(classes.lemmings, button.class_name)
+                            break
+                        # jakiś efekt kliknięcia    def __str__(self):
+
+                if method_to_use is not None:
+                    for lem in lemmings:
+                        if lem.rect.collidepoint(click_position):
+                            lemmings.append(method_to_use(lemming_arg=lem, objects_dictionarized=objects_dictionarized))
+
+                            stats["Class_list"][method_to_use.__name__] -= 1
+                            method_to_use = None
+                            level_save(1, lemmings, objects_dictionarized, stats)
+                            # charges -= 1
+                            # wyłączyć efekt kliknięcia
+                            break

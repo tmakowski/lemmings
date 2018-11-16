@@ -174,16 +174,19 @@ def level_interface(stats, objects_dictionarized, block_size):
     stats["Ui_start"] = ui_start
 
     objects_dictionarized["Buttons"] = [
-        classes.objects.LevelInterfaceButton(position_x=0, position_y=(ui_start - block_size),
-                                             block_size=block_size, img=INTERFACE_BAR,
-                                             length_x=stats["Level_width"], length_y=1)]
+        classes.objects.LevelInterfaceButton(position_x=0,
+                                             position_y=(ui_start - block_size),
+                                             block_size=block_size,
+                                             length_x=stats["Level_width"], length_y=1,
+                                             img=INTERFACE_BAR)]
 
     offset_x = 0
-    for class_name in stats["Class_list"]:
+    for (class_name, charges) in stats["Class_list"].items():
         objects_dictionarized["Buttons"].append(
             classes.objects.LevelInterfaceButton(position_x=offset_x * ui_height * (block_size + 1),
                                                  position_y=ui_start, block_size=block_size,
-                                                 length_x=ui_height, length_y=ui_height, class_name_arg=class_name,
+                                                 length_x=ui_height, length_y=ui_height,
+                                                 class_name_arg=class_name, charges_arg=charges,
                                                  img2=CLASS_TO_GRAPHICS_DICT[class_name]))
         offset_x += 1
 

@@ -170,7 +170,7 @@ class MenuButton (Floor):
 class LevelInterfaceButton (Floor):
     def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
                  img=OBJECT_GRAPHICS_WATER, img2=None,
-                 class_name_arg=None,
+                 class_name_arg=None, charges_arg=None,
                  attribute_dict=None):
         super(self.__class__, self).__init__(position_x, position_y, block_size,
                                              length_x, length_y, img, attribute_dict)
@@ -187,3 +187,14 @@ class LevelInterfaceButton (Floor):
 
     def __dir__(self):
         return ["image_name", "length_x", "length_y", "class_name", "image_name2"]
+
+    def charges_to_text(self, stats, text_font_arg, text_color_arg):
+        if self.class_name is None:
+            charges = ""
+        else:
+            charges = stats["Class_list"][self.class_name]
+
+        text_ = text_font_arg.render(str(charges), True, text_color_arg)
+        text_rect = text_.get_rect(center=(self.rect.x + self.rect.width / 2,
+                                           self.rect.y + self.rect.height / 2))
+        return text_, text_rect
