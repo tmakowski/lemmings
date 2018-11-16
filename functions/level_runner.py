@@ -116,3 +116,7 @@ def level_run(block_size=None, level_slot=None, save_slot=None):
                             # charges -= 1
                             # wyłączyć efekt kliknięcia
                             break
+                    continue
+
+                for lem in lemmings:
+                    lem.on_click(click_position, objects_dictionarized, lemmings)

@@ -51,7 +51,7 @@ while True:
                 if button.rect.collidepoint(click_pos):
 
                     if button == button_start:
-                        button_to_action_dict[button](level_slot=2)
+                        button_to_action_dict[button](level_slot=3)
                     elif button == button_load:
                         button_to_action_dict[button][0](save_slot=button_to_action_dict[button][1])
                     else:

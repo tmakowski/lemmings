@@ -13,6 +13,7 @@ LEMMING_DEFAULT_SPEED = 1
 LEMMING_GRAPHICS_DEFAULT = "graphics/lemming2.png"
 LEMMING_GRAPHICS_DEAD = "graphics/lemming_dead.png"
 LEMMING_GRAPHICS_STOPPER = "graphics/lemming_stopper.png"
+LEMMING_GRAPHICS_ANTIGRAVITY = "graphics/exit.png"
 
 #
 OBJECT_DICT = {"F": "Floor",
@@ -37,4 +38,5 @@ LEVEL_LAYOUT = "level.txt"
 
 INTERFACE_BAR = "graphics/exit.png"
 CLASS_TO_GRAPHICS_DICT = {
-    "LemmingStopper": LEMMING_GRAPHICS_STOPPER}
+    "LemmingStopper": LEMMING_GRAPHICS_STOPPER,
+    "LemmingAntiGravity": LEMMING_GRAPHICS_ANTIGRAVITY}

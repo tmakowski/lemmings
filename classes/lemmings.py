@@ -4,7 +4,7 @@ File containing main lemming class and it's subclasses.
 import pygame
 
 from global_variables import LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
-    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMING_GRAPHICS_STOPPER
+    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMING_GRAPHICS_STOPPER, LEMMING_GRAPHICS_ANTIGRAVITY
 
 
 class Lemming:
@@ -109,6 +109,9 @@ class Lemming:
         for attr in self.__dir__():
             attribute_dict[attr] = getattr(self, attr)
         return [self.__class__.__name__, (self.rect.x, self.rect.y), attribute_dict.__str__()].__str__()
+
+    def on_click(self, click_position, objects_dictionarized, lemmings):
+        pass
 
     def move(self):
         """
@@ -232,11 +235,18 @@ class LemmingStopper (Lemming):
         """
         super(self.__class__, self).__init__(lemming_arg.rect.x, lemming_arg.rect.y,
                                              block_size=lemming_arg.image.get_rect().height,
-                                             img_arg=img_arg, direction_x=0,
+                                             img_arg=img_arg, speed_arg=0,
                                              lemming_arg=lemming_arg, attribute_dict=attribute_dict)
         lemming_arg.remove = 1
 
         objects_dictionarized["Stoppers"].append(self)
+
+    def on_click(self, click_position, objects_dictionarized, lemmings):
+        if self.rect.collidepoint(click_position):
+            lemmings.append(Lemming(self.rect.x, self.rect.y, self.rect.height, img_arg=LEMMING_GRAPHICS_DEFAULT,
+                                    speed_arg=1, lemming_arg=self))
+            objects_dictionarized["Stoppers"].remove(self)
+            self.remove = 1
 
     def collision_lemmings(self, lemmings):
         pass
@@ -245,38 +255,50 @@ class LemmingStopper (Lemming):
         super(self.__class__, self).collision_floor([obj for obj in floors if obj != self])
 
 
-# Anti-gravity lemmings:
-#     def collision_floor(self, floors):
-#         """
-#         Checks if the lemming has a floor under it's feet. If it doesn't then the lemming starts to fall.
-#         If it is falling and touches the floor then we perform check whether the fall distance wasn't too big.
-#         """
-#         # Check if lemming is touching the floor on the floor
-#         if self.rect.collidelist(floors) != -1:
-#
-#             # Check if the lemming has passed the fall threshold
-#             if self.fall > LEMMING_FALL_THRESHOLD * self.image.get_rect().height:
-#                 self.__del__()
-#
-#             # Check if it was falling at all
-#             elif self.fall > 0:
-#
-#                 # If it was falling, then stop the fall and reset the fall counter
-#                 self.dirY = 0
-#                 self.fall = 0
-#
-#             if self.fall < 0:
-#                 self.dirY = 0
-#                 self.fall = -1
-#             else:
-#             # Colliding the lemming with the sides of the floors/walls that are not directly below him
-#                 if self.rect.collidelist([floor for floor in floors if abs(self.rect.bottom-floor.rect.top) > 1]) != -1:
-#                     self.dirX *= -1
-#
-#         else:
-#
-#             # If the lemming slipped of the floor then make it start falling
-#             if self.dirY == 0:
-#                 self.dirY = 1
-#
-#         return self
+class LemmingAntiGravity (Lemming):
+    def __init__(self, lemming_arg, objects_dictionarized, attribute_dict=None, img_arg=LEMMING_GRAPHICS_ANTIGRAVITY):
+        """
+        This constructor creates a stopper lemming in place of the other
+        """
+        super(self.__class__, self).__init__(lemming_arg.rect.x, lemming_arg.rect.y,
+                                             block_size=lemming_arg.image.get_rect().height,
+                                             img_arg=img_arg,
+                                             lemming_arg=lemming_arg, attribute_dict=attribute_dict)
+        lemming_arg.remove = 1
+        self.rect.y -= 2
+        self.fall -= 2
+
+    def on_click(self, click_position, objects_dictionarized, lemmings):
+        if self.rect.collidepoint(click_position):
+            lemmings.append(Lemming(self.rect.x, self.rect.y, self.rect.height, img_arg=LEMMING_GRAPHICS_DEFAULT,
+                                    fall_arg=0, lemming_arg=self))
+            self.remove = 1
+
+    def collision_floor(self, floors):
+        """
+        Checks if the lemming has a floor under it's feet. If it doesn't then the lemming starts to fall.
+        If it is falling and touches the floor then we perform check whether the fall distance wasn't too big.
+        """
+        # Check if lemming is touching the floor on the floor
+        if self.rect.collidelist(floors) != -1:
+
+            # Check if the lemming has passed the fall threshold
+            if -self.fall > LEMMING_FALL_THRESHOLD * self.image.get_rect().height:
+                self.__del__()
+
+            # Check if it was falling at all
+            elif -self.fall > 0:
+
+                # If it was falling, then stop the fall and reset the fall counter
+                self.dirY = 0
+                self.fall = 0
+
+            # Colliding the lemming with the sides of the floors/walls that are not directly below him
+            if self.rect.collidelist([floor for floor in floors if abs(self.rect.top-floor.rect.bottom) > 1]) != -1:
+                self.dirX *= -1
+
+        else:
+            # If the lemming slipped of the floor then make it start falling
+            self.dirY = -1
+
+        return self
