@@ -4,32 +4,39 @@ import sys
 import time
 
 import classes.lemmings
-from functions.level_utilities import level_generate, level_interface, level_import_layout, level_load_save, level_save
+from functions.level_utilities import level_generate, level_import_layout, level_load_save, level_save
 from global_variables import LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
+from classes.objects import LevelInterface
 # from classes.lemmings import *
 
 
-def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file=None, save_slot=None):
+def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size=None, level_file=None, save_slot=None):
     # Level startup
     pygame.init()
-    level_width = 54
-    level_size = (int(block_size * level_width), int(0.5 * block_size * level_width))
-    screen = pygame.display.set_mode(level_size)                    # setting screen of the globally set size
+
     if save_slot is None:
-        lemmings = []                                     # initializing a list for lemmings if those weren't provided
         level = level_import_layout(level_file)                    # importing level layout
         objects_dictionarized = level_generate(level, block_size)  # generating objects based on the level visualization
         objects_dictionarized["Stoppers"] = []
+        lemmings = []  # initializing a list for lemmings if those weren't provided
+        stats = {"Block_size": block_size}
     else:
-        lemmings, objects_dictionarized = level_load_save(save_slot, block_size)
+        lemmings, objects_dictionarized, stats = level_load_save(save_slot)
         lemmings_spawn_number = 0 # should be read
+        block_size = stats["Block_size"]
 
+    level_width = 54
+    level_size = (int(block_size * level_width), int(0.5 * block_size * level_width))
+    screen = pygame.display.set_mode(level_size)  # setting screen of the globally set size
     #
-    interface = level_interface(block_size, level_size)
-    # usuwać klucz Stoppers na końcu!!
+    interface = LevelInterface(block_size=block_size, level_size=level_size, class_list=["LemmingStopper"]).ui
+    objects_dictionarized["Buttons"] = interface["Buttons"]
 
     method_to_use = None
     dev_timer = 0
+
+    text_font = pygame.font.Font(None, block_size)
+    text_color = (255, 255, 255)
 
     while True:
         for event in pygame.event.get():
@@ -41,23 +48,20 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file
                 click_position = pygame.mouse.get_pos()
                 clicked = [s for s in lemmings if s.rect.collidepoint(click_position)]
 
-                for button in interface["Buttons"]:
+                for button in objects_dictionarized["Buttons"]:
                     if button.rect.collidepoint(click_position):
                         if button.class_name is not None:
                             method_to_use = getattr(classes.lemmings, button.class_name)
                             break
-                        # jakiś efekt kliknięcia
-                        else:
-                            obj_dict = objects_dictionarized.copy()
-                            obj_dict.pop("Stoppers")
-                            level_save(3, lemmings, obj_dict)
-                            del obj_dict
+                        # jakiś efekt kliknięcia    def __str__(self):
 
                 if method_to_use is not None:
                     for lem in lemmings:
                         if lem.rect.collidepoint(click_position):
                             lemmings.append(method_to_use(lemming_arg=lem, objects_dictionarized=objects_dictionarized))
                             method_to_use = None
+                            level_save(5, lemmings, objects_dictionarized, stats)
+                            print(interface)
                             # charges -= 1
                             # wyłączyć efekt kliknięcia
                             break
@@ -84,7 +88,7 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file
             lem.collision_objects(objects_dictionarized)
 
             # Collides lemmings with one another
-            lem.collision_lemmings(lemmings)
+            # lem.collision_lemmings(lemmings)
 
             # Removing lemmings that made it to the exit or got upgraded to different type
             if lem.remove == 1:
@@ -99,21 +103,29 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file
         screen.fill((0, 0, 0))
 
         # Drawing lemmings and all objects
-        for obj in (lemmings
-                    + list(chain.from_iterable(objects_dictionarized.values()))
-                    + interface["Buttons"]):
+        for obj in lemmings + list(chain.from_iterable(objects_dictionarized.values())):
             screen.blit(obj.image, obj.rect)
+
+        for button in objects_dictionarized["Buttons"]:
+            if button.image_name2 is not None:
+                screen.blit(button.image2, button.rect2)
+
+        clock_text = text_font.render(interface["Time_left"]+str(round(interface["Timer"], 1)), True, text_color)
+        screen.blit(clock_text, interface["Clock_position"])
 
         # Changing display to show drawn objects
         pygame.display.flip()
 
     # System stuff
         # Setting custom pause between frames
+        dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
+        interface["Timer"] -= dt
         time.sleep(LEVEL_FRAME_TIME)
 
-        dev_timer += 1
-        if lemmings == [] and dev_timer > lemmings_spawn_rate:
-            for obj_exit in objects_dictionarized["Exit"]:
-                print("Uwaga, uwaga, tyle lemingów wyszło:", obj_exit.lemming_exit_number)
-            exec(open("./main_menu.py").read())
-            sys.exit()
+
+        # dev_timer += 1
+        # if lemmings == [] and dev_timer > lemmings_spawn_rate:
+        #     for obj_exit in objects_dictionarized["Exit"]:
+        #         print("Uwaga, uwaga, tyle lemingów wyszło:", obj_exit.lemming_exit_number)
+        #     exec(open("./main_menu.py").read())
+        #     sys.exit()

@@ -2,7 +2,8 @@ import pygame
 
 from classes.lemmings import Lemming
 from global_variables import \
-    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER
+    OBJECT_GRAPHICS_FLOOR, OBJECT_GRAPHICS_WALL, OBJECT_GRAPHICS_ENTRANCE, OBJECT_GRAPHICS_EXIT, OBJECT_GRAPHICS_WATER,\
+    INTERFACE_BAR, CLASS_TO_GRAPHICS_DICT
 
 
 class Floor:
@@ -151,7 +152,7 @@ class MenuButton (Floor):
         super(self.__class__, self).__init__(position_x, position_y, block_size, length_x, length_y, img)
 
         # Saving the text
-        self.text = text_font_arg.render(text_arg, False, text_color_arg)
+        self.text = text_font_arg.render(text_arg, True, text_color_arg)
 
         # Text's rectangle centered in the button's rectangle
         self.text_rect = self.text.get_rect(center=(self.rect.x + self.rect.width/2,
@@ -168,7 +169,7 @@ class MenuButton (Floor):
 
 class LevelInterfaceButton (Floor):
     def __init__(self, position_x, position_y, block_size, length_x=None, length_y=None,
-                 img=OBJECT_GRAPHICS_WATER,
+                 img=OBJECT_GRAPHICS_WATER, img2=None,
                  class_name_arg=None,
                  attribute_dict=None):
         super(self.__class__, self).__init__(position_x, position_y, block_size,
@@ -176,5 +177,50 @@ class LevelInterfaceButton (Floor):
 
         self.class_name = class_name_arg
 
+        self.image_name2 = img if img2 is None else img2
+        self.image2 = pygame.transform.scale(
+            pygame.image.load(self.image_name2),
+            (int(0.75 * block_size * self.length_x), int(0.75 * block_size * self.length_y)))
+
+        self.rect2 = self.image2.get_rect(center=(self.rect.x + 0.5 * self.image.get_rect().width,
+                                                  self.rect.y + 0.5 * self.image.get_rect().height))
+
     def __dir__(self):
-        return ["image_name", "length_x", "length_y", "class_name"]
+        return ["image_name", "length_x", "length_y", "class_name", "image_name2"]
+
+
+class LevelInterface:
+    def __init__(self, interface_dict=None, block_size=None, level_size=None, class_list=None):
+
+        if None not in [block_size, level_size, class_list]:
+            ui_width = level_size[0] // block_size
+            ui_height = 3
+            ui_start = level_size[1] - block_size * ui_height
+
+            interface_dict = {
+                "Buttons": [
+                    LevelInterfaceButton(position_x=0, position_y=(ui_start - block_size),
+                                         block_size=block_size,
+                                         img=INTERFACE_BAR, length_x=ui_width, length_y=1)],
+                "Clock": pygame.time.Clock(),
+                "Clock_position": (block_size, ui_start - 0.8 * block_size),
+                "Timer": 120,
+                "Time_left": "Time left: "}
+
+            # Adding class specific buttons
+            offset_x = 0
+            for class_name in class_list:
+                interface_dict["Buttons"].append(
+                    LevelInterfaceButton(position_x=offset_x * ui_height * (block_size + 1),
+                                         position_y=ui_start, block_size=block_size,
+                                         length_x=ui_height, length_y=ui_height, class_name_arg=class_name,
+                                         img2=CLASS_TO_GRAPHICS_DICT[class_name]))
+                offset_x += 1
+
+        self.ui = interface_dict
+
+    def __dir__(self):
+        return ["ui"]
+
+    def __str__(self):
+        return self.ui.__str__()

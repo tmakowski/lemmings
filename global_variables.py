@@ -12,7 +12,7 @@ LEMMING_FALL_THRESHOLD = 5
 LEMMING_DEFAULT_SPEED = 1
 LEMMING_GRAPHICS_DEFAULT = "graphics/lemming2.png"
 LEMMING_GRAPHICS_DEAD = "graphics/lemming_dead.png"
-LEMMINGS_GRAPHICS_STOPPER = "graphics/lemming_stopper.png"
+LEMMING_GRAPHICS_STOPPER = "graphics/lemming_stopper.png"
 
 #
 OBJECT_DICT = {"F": "Floor",
@@ -30,5 +30,8 @@ OBJECT_GRAPHICS_WATER = "graphics/water.png"
 SAVE_PATH = "./saves/save"
 SAVE_LEMMINGS = "lemmings.txt"
 SAVE_OBJECTS = "objects.txt"
+SAVE_STATS = "stats.txt"
 
-
+INTERFACE_BAR = "graphics/exit.png"
+CLASS_TO_GRAPHICS_DICT = {
+    "LemmingStopper": LEMMING_GRAPHICS_STOPPER}

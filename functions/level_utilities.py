@@ -3,29 +3,13 @@ The purpose of this module is translating text visualization of the map to the p
 """
 import classes.objects
 from classes.lemmings import Lemming
-from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS
+from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS
 
 code_to_class_dict = dict([
     (code, getattr(classes.objects, class_name))
     for (code, class_name)
     in OBJECT_DICT.items()
 ])
-
-
-def level_interface(block_size, level_size):  # może lista?
-    ui_width = level_size[0]//block_size
-    ui_height = 3
-    ui_start = level_size[1] - block_size * ui_height
-    # button ( ....)
-
-    interface_dict = {"Buttons": [
-        classes.objects.LevelInterfaceButton(position_x=0, position_y=ui_start, block_size=block_size,
-                                             length_y=ui_height, class_name_arg="LemmingStopper"),
-        classes.objects.LevelInterfaceButton(position_x=2*block_size, position_y=ui_start, block_size=block_size,
-                                             length_y=ui_height)]}
-
-    # return dict with (dict : button->[charges, type], level stats - spawn rate etc.
-    return interface_dict
 
 
 def level_generate(level_layout, block_size):
@@ -129,28 +113,41 @@ def level_load_objects(file_name, block_size, path="./"):
     return sort_objects_to_dict(objects)
 
 
-def level_load_save(save_slot, block_size, path=None):
+def level_load_stats(file_name, path="./"):
+    with open(path + file_name, "r") as f:
+        stats = eval(f.readline().encode('utf-8'))
+
+    return stats
+
+
+def level_load_save(save_slot, path=None):
     """
     Loads objects and lemmings from files
     """
     if path is None:
         path = SAVE_PATH + str(save_slot) + "/"
 
+    stats = level_load_stats(SAVE_STATS, path)
+
+    block_size = stats["Block_size"]
     objects_dictionarized = level_load_objects(SAVE_OBJECTS, block_size, path)
     lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, objects_dictionarized, path)
 
-    return lemmings, objects_dictionarized
+    return lemmings, objects_dictionarized, stats
 
 
-def level_save(save_slot, lemmings, objects_dictionarized, path=None):
+def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
     if path is None:
         path = SAVE_PATH + str(save_slot) + "/"
 
     with open(path + SAVE_OBJECTS, "w") as f:
-        for obj_type in objects_dictionarized.values():
+        for obj_type in [value for (key, value) in objects_dictionarized.items() if key != "Stoppers"]:
             for obj in obj_type:
                 print(obj, file=f)
 
     with open(path + SAVE_LEMMINGS, "w") as f:
         for lem in lemmings:
             print(lem, file=f)
+
+    with open(path + SAVE_STATS, "w") as f:
+        print(stats, file=f)

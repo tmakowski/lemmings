@@ -4,7 +4,7 @@ File containing main lemming class and it's subclasses.
 import pygame
 
 from global_variables import LEMMING_DEFAULT_SPEED, LEMMING_FALL_THRESHOLD,\
-    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMINGS_GRAPHICS_STOPPER
+    LEMMING_GRAPHICS_DEFAULT, LEMMING_GRAPHICS_DEAD, LEMMING_GRAPHICS_STOPPER
 
 
 class Lemming:
@@ -157,6 +157,9 @@ class Lemming:
             self.dirX *= -1
         return self
 
+    def collision_buttons(self, buttons):
+        pass
+
     def collision_floor(self, floors):
         """
         Checks if the lemming has a floor under it's feet. If it doesn't then the lemming starts to fall.
@@ -224,7 +227,7 @@ class LemmingStopper (Lemming):
     """
     # This extended class is going to represent the lemming with a stopper function.
     """
-    def __init__(self, lemming_arg, objects_dictionarized, attribute_dict=None, img_arg=LEMMINGS_GRAPHICS_STOPPER):
+    def __init__(self, lemming_arg, objects_dictionarized, attribute_dict=None, img_arg=LEMMING_GRAPHICS_STOPPER):
         """
         This constructor creates a stopper lemming in place of the other
         """
@@ -243,7 +246,7 @@ class LemmingStopper (Lemming):
         pass
 
     def collision_floor(self, floors):
-        pass
+        super(self.__class__, self).collision_floor([obj for obj in floors if obj != self])
         # for lem in lemmings:
         #     lem.collision_floor()
             # if self.rect.colliderect(lem.rect):
