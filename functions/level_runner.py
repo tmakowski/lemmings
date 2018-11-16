@@ -19,11 +19,12 @@ def level_run(lemmings_spawn_number, lemmings_spawn_rate, block_size, level_file
         lemmings = []                                     # initializing a list for lemmings if those weren't provided
         level = level_import_layout(level_file)                    # importing level layout
         objects_dictionarized = level_generate(level, block_size)  # generating objects based on the level visualization
+        objects_dictionarized["Stoppers"] = []
     else:
         lemmings, objects_dictionarized = level_load_save(save_slot, block_size)
         lemmings_spawn_number = 0 # should be read
 
-    #objects_dictionarized["Stoppers"] = []
+    #
     interface = level_interface(block_size, level_size)
     # usuwać klucz Stoppers na końcu!!
 
