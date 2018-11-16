@@ -182,7 +182,6 @@ class Lemming:
             # Colliding the lemming with the sides of the floors/walls that are not directly below him
             if self.rect.collidelist([floor for floor in floors if abs(self.rect.bottom-floor.rect.top) > 1]) != -1:
                 self.dirX *= -1
-
         else:
 
             # If the lemming slipped of the floor then make it start falling
@@ -237,28 +236,47 @@ class LemmingStopper (Lemming):
                                              lemming_arg=lemming_arg, attribute_dict=attribute_dict)
         lemming_arg.remove = 1
 
-        if "Stoppers" in objects_dictionarized.keys():
-            objects_dictionarized["Stoppers"].append(self)
-        else:
-            objects_dictionarized["Stoppers"] = [self]
+        objects_dictionarized["Stoppers"].append(self)
 
     def collision_lemmings(self, lemmings):
         pass
 
     def collision_floor(self, floors):
         super(self.__class__, self).collision_floor([obj for obj in floors if obj != self])
-        # for lem in lemmings:
-        #     lem.collision_floor()
-            # if self.rect.colliderect(lem.rect):
-            #     lem.dirX *= -1
-            #     lem.grace = lem.image.get_rect().width + 2
-            # else:
-            #     lem.grace = 0
 
-            # to działa chyba, że lemming spadnie na blockera
-                # if (lem.fall == 0
-                #         and abs(self.rect.left - lem.rect.left) < 2
-                #         and abs(self.rect.right - lem.rect.right) < 2
-                #         and self.rect.left >= lem.rect.right
-                #         and self.rect.right <= lem.rect.left):
-                #     lem.dirX *= -1
+
+# Anti-gravity lemmings:
+#     def collision_floor(self, floors):
+#         """
+#         Checks if the lemming has a floor under it's feet. If it doesn't then the lemming starts to fall.
+#         If it is falling and touches the floor then we perform check whether the fall distance wasn't too big.
+#         """
+#         # Check if lemming is touching the floor on the floor
+#         if self.rect.collidelist(floors) != -1:
+#
+#             # Check if the lemming has passed the fall threshold
+#             if self.fall > LEMMING_FALL_THRESHOLD * self.image.get_rect().height:
+#                 self.__del__()
+#
+#             # Check if it was falling at all
+#             elif self.fall > 0:
+#
+#                 # If it was falling, then stop the fall and reset the fall counter
+#                 self.dirY = 0
+#                 self.fall = 0
+#
+#             if self.fall < 0:
+#                 self.dirY = 0
+#                 self.fall = -1
+#             else:
+#             # Colliding the lemming with the sides of the floors/walls that are not directly below him
+#                 if self.rect.collidelist([floor for floor in floors if abs(self.rect.bottom-floor.rect.top) > 1]) != -1:
+#                     self.dirX *= -1
+#
+#         else:
+#
+#             # If the lemming slipped of the floor then make it start falling
+#             if self.dirY == 0:
+#                 self.dirY = 1
+#
+#         return self

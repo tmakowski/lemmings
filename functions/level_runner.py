@@ -4,36 +4,29 @@ import sys
 import time
 
 import classes.lemmings
-from functions.level_utilities import level_generate, level_import_layout, level_load_save, level_save, level_create
-from global_variables import LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
-from classes.objects import LevelInterface
-# from classes.lemmings import *
+from functions.level_utilities import level_load_save, level_save, level_create
+from global_variables import BLOCK_DEFAULT_SIZE, LEVEL_DEATH_FRAMES, LEVEL_FRAME_TIME
 
 
-def level_run(level_slot=None, save_slot=None):
+def level_run(block_size=None, level_slot=None, save_slot=None):
     # Level startup
     pygame.init()
 
     if save_slot is None:
-        lemmings, objects_dictionarized, stats = level_create(level_slot)
-        # level = level_import_layout(level_file)                    # importing level layout
-        # objects_dictionarized = level_generate(level, block_size)# generating objects based on the level visualization
-        # objects_dictionarized["Stoppers"] = []
-        # lemmings = []  # initializing a list for lemmings if those weren't provided
-        # stats = {"Block_size": block_size}
+        lemmings, objects_dictionarized, stats, interface = level_create(level_slot, new_block_size=block_size)
     else:
-        lemmings, objects_dictionarized, stats = level_load_save(save_slot)
+        lemmings, objects_dictionarized, stats, interface = level_load_save(save_slot, new_block_size=block_size)
 
-    block_size = stats["Block_size"]
+    if block_size is None:
+        block_size = stats["Block_size"]
+    else:
+        stats["Block_size"] = block_size
     lemmings_spawn_number = stats["Lemmings_spawn_number"]
     lemmings_spawn_rate = stats["Lemmings_spawn_rate"]
-
     level_width = stats["Level_width"]
+
     level_size = (int(block_size * level_width), int(0.5 * block_size * level_width))
     screen = pygame.display.set_mode(level_size)  # setting screen of the globally set size
-    #
-    interface = LevelInterface(block_size=block_size, level_size=level_size, class_list=["LemmingStopper"]).ui
-    # objects_dictionarized["Buttons"] = interface["Buttons"]
 
     method_to_use = None
     text_font = pygame.font.Font(None, block_size)
@@ -60,7 +53,7 @@ def level_run(level_slot=None, save_slot=None):
                         if lem.rect.collidepoint(click_position):
                             lemmings.append(method_to_use(lemming_arg=lem, objects_dictionarized=objects_dictionarized))
                             method_to_use = None
-                            level_save(3, lemmings, objects_dictionarized, stats)
+                            level_save(1, lemmings, objects_dictionarized, stats)
                             # charges -= 1
                             # wyłączyć efekt kliknięcia
                             break
@@ -109,7 +102,7 @@ def level_run(level_slot=None, save_slot=None):
             if button.image_name2 is not None:
                 screen.blit(button.image2, button.rect2)
 
-        clock_text = text_font.render(interface["Time_left"]+str(round(interface["Timer"], 1)), True, text_color)
+        clock_text = text_font.render(interface["Time_left"]+str(round(stats["Timer"], 1)), True, text_color)
         screen.blit(clock_text, interface["Clock_position"])
 
         # Changing display to show drawn objects
@@ -118,5 +111,5 @@ def level_run(level_slot=None, save_slot=None):
     # System stuff
         # Setting custom pause between frames
         dt = interface["Clock"].tick(1 / LEVEL_FRAME_TIME) / 1000
-        interface["Timer"] -= dt
-        time.sleep(LEVEL_FRAME_TIME)
+        stats["Timer"] -= dt
+        time.sleep(LEVEL_FRAME_TIME * (BLOCK_DEFAULT_SIZE/block_size))

@@ -1,6 +1,7 @@
 """
 The purpose of this module is translating text visualization of the map to the proper objects.
 """
+import pygame
 import classes.objects
 from classes.lemmings import Lemming
 from global_variables import OBJECT_DICT, SAVE_PATH, SAVE_LEMMINGS, SAVE_OBJECTS, SAVE_STATS, LEVEL_PATH, LEVEL_LAYOUT,\
@@ -63,11 +64,12 @@ def level_import_layout(file_name, path="./"):
     return layout
 
 
-def level_load_lemmings(file_name, block_size, objects_dictionarized, path="./"):
+def level_load_lemmings(file_name, block_size, objects_dictionarized, stats=None, path="./"):
     """
     Function creates list of lemmings based on a file provided
     """
     lemmings = []
+    block_size_scaling = 1 if stats is None else block_size / stats["Block_size"]
     with open(path + file_name, "r") as f:
         for line in f:
             # Reading the line as a list
@@ -79,7 +81,8 @@ def level_load_lemmings(file_name, block_size, objects_dictionarized, path="./")
             attribute_dict = eval(lem_input[2])
 
             # Creating output lemming
-            lem_output = Lemming(position_x=position_x, position_y=position_y,
+            lem_output = Lemming(position_x=int(position_x * block_size_scaling),
+                                 position_y=int(position_y * block_size_scaling),
                                  block_size=block_size, attribute_dict=attribute_dict)
 
             # Either adding the lemming to a pool or converting it to a specific type first
@@ -92,11 +95,12 @@ def level_load_lemmings(file_name, block_size, objects_dictionarized, path="./")
     return lemmings
 
 
-def level_load_objects(file_name, block_size, path="./"):
+def level_load_objects(file_name, block_size, stats=None, path="./"):
     """
     Function creates list of objects based on file input (at the end we sort objects to dictionary).
     """
     objects = []
+    block_size_scaling = 1 if stats is None else block_size/stats["Block_size"]
     with open(path + file_name, "r") as f:
         for line in f:
             # Reading the line as a list
@@ -110,19 +114,24 @@ def level_load_objects(file_name, block_size, path="./"):
             # Creating output lemming
             objects.append(
                 getattr(classes.objects, class_name)
-                (position_x=position_x, position_y=position_y, block_size=block_size, attribute_dict=attribute_dict))
+                (position_x=int(position_x * block_size_scaling),
+                 position_y=int(position_y * block_size_scaling),
+                 block_size=block_size, attribute_dict=attribute_dict))
 
     return sort_objects_to_dict(objects)
 
 
 def level_load_stats(file_name, path="./"):
+    stats = ""
     with open(path + file_name, "r") as f:
-        stats = eval(f.readline().encode('utf-8'))
-
+        # stats = eval(f.readline().encode('utf-8'))
+        for line in f:
+            stats += line.rstrip()
+        stats = eval(stats.encode('utf-8'))
     return stats
 
 
-def level_load_save(save_slot, path=None):
+def level_load_save(save_slot, new_block_size=None, path=None):
     """
     Loads objects and lemmings from files
     """
@@ -131,13 +140,14 @@ def level_load_save(save_slot, path=None):
 
     stats = level_load_stats(SAVE_STATS, path)
 
-    block_size = stats["Block_size"]
-    objects_dictionarized = level_load_objects(SAVE_OBJECTS, block_size, path)
-    lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, objects_dictionarized, path)
+    block_size = stats["Block_size"] if new_block_size is None else new_block_size
+    objects_dictionarized = level_load_objects(SAVE_OBJECTS, block_size, stats, path)
 
-    objects_dictionarized = level_interface(stats, objects_dictionarized)
+    lemmings = level_load_lemmings(SAVE_LEMMINGS, block_size, objects_dictionarized, stats, path)
 
-    return lemmings, objects_dictionarized, stats
+    objects_dictionarized, stats, interface = level_interface(stats, objects_dictionarized, block_size)
+
+    return lemmings, objects_dictionarized, stats, interface
 
 
 def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
@@ -157,10 +167,11 @@ def level_save(save_slot, lemmings, objects_dictionarized, stats, path=None):
         print(stats, file=f)
 
 
-def level_interface(stats, objects_dictionarized):
-    block_size = stats["Block_size"]
+def level_interface(stats, objects_dictionarized, block_size):
+    # block_size = stats["Block_size"] if new_block_size is None else new_block_size
     ui_height = stats["Ui_height"]
     ui_start = (0.5 * stats["Level_width"] - ui_height) * block_size
+    stats["Ui_start"] = ui_start
 
     objects_dictionarized["Buttons"] = [
         classes.objects.LevelInterfaceButton(position_x=0, position_y=(ui_start - block_size),
@@ -175,19 +186,26 @@ def level_interface(stats, objects_dictionarized):
                                                  length_x=ui_height, length_y=ui_height, class_name_arg=class_name,
                                                  img2=CLASS_TO_GRAPHICS_DICT[class_name]))
         offset_x += 1
-    return objects_dictionarized
+
+    interface = {
+        "Clock": pygame.time.Clock(),
+        "Clock_position": (block_size, ui_start - 0.8 * block_size),
+        "Time_left": "Time left: "}
+    return objects_dictionarized, stats, interface
 
 
-def level_create(level_slot, path=None):
+def level_create(level_slot, new_block_size=None, path=None):
     if path is None:
         path = LEVEL_PATH + str(level_slot) + "/"
 
-    level = level_import_layout(path + LEVEL_LAYOUT)
-
     stats = level_load_stats(SAVE_STATS, path)
-    objects_dictionarized = level_generate(level, stats["Block_size"])
+
+    level = level_import_layout(path + LEVEL_LAYOUT)
+    block_size = stats["Block_size"] if new_block_size is None else new_block_size
+    objects_dictionarized = level_generate(level, block_size)
+
     lemmings = []
 
-    objects_dictionarized = level_interface(stats, objects_dictionarized)
+    objects_dictionarized, stats, interface = level_interface(stats, objects_dictionarized, block_size)
 
-    return lemmings, objects_dictionarized, stats
+    return lemmings, objects_dictionarized, stats, interface
